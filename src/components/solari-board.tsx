@@ -1,12 +1,13 @@
 "use client"
 
-import {useEffect, useState} from "react"
+import {useEffect, useState, type CSSProperties} from "react"
 
 const CHARS = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()-."
-
-function padLine(value: string, length: number) {
-  return value.toUpperCase().slice(0, length).padEnd(length, " ")
-}
+const LINES = ["HELLO", "THIS IS THE BLOG OF", "FRONTEND DEVELOPER", "YONGHEE KIM"]
+const TICK_MS = 28
+const STAGGER_MS = 18
+const LINE_STAGGER_MS = 90
+const HOLD_MS = 2000
 
 function nextChar(current: string, target: string) {
   if (current === target) return current
@@ -15,7 +16,32 @@ function nextChar(current: string, target: string) {
   return CHARS[(index + 1) % CHARS.length]
 }
 
-function SolariCell({target, delay}: {target: string; delay: number}) {
+function stepsFromSpace(letter: string) {
+  const goal = CHARS.includes(letter) ? letter : " "
+  return CHARS.indexOf(goal)
+}
+
+function boardDuration() {
+  return Math.max(
+    ...LINES.flatMap((line, lineIndex) =>
+      line.split("").map((letter, index) => lineIndex * LINE_STAGGER_MS + index * STAGGER_MS + stepsFromSpace(letter) * TICK_MS),
+    ),
+  )
+}
+
+function SolariCell({
+  target,
+  delay,
+  cycle,
+  tickMs = TICK_MS,
+  flipMs = 70,
+}: {
+  target: string
+  delay: number
+  cycle: number
+  tickMs?: number
+  flipMs?: number
+}) {
   const goal = CHARS.includes(target) ? target : " "
   const [char, setChar] = useState(" ")
   const [flipping, setFlipping] = useState(false)
@@ -27,22 +53,30 @@ function SolariCell({target, delay}: {target: string; delay: number}) {
       return
     }
 
-    let current = char
-    let timer = window.setTimeout(function tick() {
+    setChar(" ")
+    setFlipping(false)
+    let current = " "
+    const timers: number[] = []
+
+    const start = window.setTimeout(function tick() {
       if (current === goal) return
       current = nextChar(current, goal)
       setFlipping(true)
       setChar(current)
-      window.setTimeout(() => setFlipping(false), 70)
-      if (current !== goal) timer = window.setTimeout(tick, 42)
+      timers.push(window.setTimeout(() => setFlipping(false), flipMs))
+      if (current !== goal) timers.push(window.setTimeout(tick, tickMs))
     }, delay)
+    timers.push(start)
 
-    return () => window.clearTimeout(timer)
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-run when the target letter changes
-  }, [goal, delay])
+    return () => timers.forEach((timer) => window.clearTimeout(timer))
+  }, [goal, delay, cycle, tickMs, flipMs])
 
   return (
-    <span className={`solari-cell${flipping ? " is-flipping" : ""}`} aria-hidden="true">
+    <span
+      className={`solari-cell${flipping ? " is-flipping" : ""}`}
+      aria-hidden="true"
+      style={{"--solari-flip-ms": `${flipMs}ms`} as CSSProperties}
+    >
       <span className="solari-cell__top">
         <span>{char}</span>
       </span>
@@ -53,37 +87,66 @@ function SolariCell({target, delay}: {target: string; delay: number}) {
   )
 }
 
-function SolariLine({text, length, stagger = 28}: {text: string; length: number; stagger?: number}) {
-  const letters = padLine(text, length).split("")
+export function SolariLine({
+  text,
+  cycle = 0,
+  stagger = STAGGER_MS,
+  delayOffset = 0,
+  tickMs,
+  flipMs,
+  gapSpaces = false,
+  className,
+}: {
+  text: string
+  cycle?: number
+  stagger?: number
+  delayOffset?: number
+  tickMs?: number
+  flipMs?: number
+  gapSpaces?: boolean
+  className?: string
+}) {
+  const letters = text.toUpperCase().split("")
 
   return (
-    <p className="solari-line">
-      {letters.map((letter, index) => (
-        <SolariCell key={`${index}-${length}`} target={letter} delay={index * stagger} />
-      ))}
-    </p>
+    <span className={className ? `solari-line ${className}` : "solari-line"}>
+      {letters.map((letter, index) =>
+        gapSpaces && letter === " " ? (
+          <span key={`${index}-space`} className="solari-space" aria-hidden="true" />
+        ) : (
+          <SolariCell
+            key={`${index}-${letter}`}
+            target={letter}
+            delay={delayOffset + index * stagger}
+            cycle={cycle}
+            tickMs={tickMs}
+            flipMs={flipMs}
+          />
+        ),
+      )}
+    </span>
   )
 }
 
-export function SolariBoard({count, titles}: {count: number; titles: string[]}) {
-  const [titleIndex, setTitleIndex] = useState(0)
-  const current = titles[titleIndex] ?? "STUDIES"
+export function SolariBoard() {
+  const [cycle, setCycle] = useState(0)
 
   useEffect(() => {
-    if (titles.length < 2) return
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    if (reduced) return
+
     const timer = window.setInterval(() => {
-      setTitleIndex((value) => (value + 1) % titles.length)
-    }, 3600)
+      setCycle((value) => value + 1)
+    }, boardDuration() + HOLD_MS)
+
     return () => window.clearInterval(timer)
-  }, [titles.length])
+  }, [])
 
   return (
-    <div className="solari-board" aria-label={`index of studies, ${count}. current ${current}`}>
-      <div className="solari-board__row">
-        <SolariLine text="STUDIES" length={7} />
-        <SolariLine text={`(${count})`} length={4} stagger={40} />
-      </div>
-      <SolariLine text={current} length={16} stagger={18} />
+    <div className="solari-board" aria-label="Hello, this is the blog of frontend developer Yonghee Kim.">
+      {LINES.map((line, index) => (
+        <SolariLine key={line} text={line} cycle={cycle} delayOffset={index * LINE_STAGGER_MS} />
+      ))}
     </div>
   )
 }

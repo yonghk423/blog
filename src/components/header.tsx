@@ -18,21 +18,12 @@ export function Header() {
                 <span>Studies</span>
               </Link>
             </li>
-            <li>
-              <Link
-                href="/snapshot"
-                className="hover-line"
-                aria-current={pathname === "/snapshot" ? "page" : undefined}
-              >
-                <span>Snapshot</span>
-              </Link>
-            </li>
           </ul>
         </nav>
-        <a href="/#about" className="header__about hover-line">
+        <Link href="/about" className="header__about hover-line" aria-current={pathname === "/about" ? "page" : undefined}>
           <span>About</span>
           <span className="arrow">→</span>
-        </a>
+        </Link>
         <MailButton email={site.email} />
       </div>
     </header>
