@@ -1,26 +1,504 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #050505;
+  --color-secondary: #dbdbdb;
+  --color-line: #bababa;
+  --grid-cols: 4;
+  --grid-gap: 10px;
+  --grid-pad: 20px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (max-width: 767px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --grid-pad: 10px;
   }
 }
 
+@theme inline {
+  --color-background: var(--color-secondary);
+  --color-foreground: var(--color-primary);
+  --font-sans: var(--font-kr), var(--font-inter), sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-height: 100%;
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+html {
+  scrollbar-width: none;
+  color-scheme: light;
+}
+
+body {
+  font-family: var(--font-inter), var(--font-kr), sans-serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+
+.main {
+  padding-top: 8px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-secondary);
+}
+
+.site-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  column-gap: var(--grid-gap);
+  padding-inline: var(--grid-pad);
+}
+
+.hover-line {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.hover-line span {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-line span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+@media (hover: hover) {
+  .hover-line:hover span::after {
+    width: 100%;
+  }
+}
+
+.header {
+  position: fixed;
+  top: 6px;
+  left: 0;
+  z-index: 50;
+  width: 100%;
+}
+
+.header__nav {
+  grid-column: 1 / span 1;
+}
+
+@media (max-width: 767px) {
+  .header__nav {
+    grid-column: 1 / span 2;
+  }
+}
+
+.header__list {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+}
+
+.header__about {
+  grid-column: 3 / span 1;
+  font-size: 12px;
+}
+
+.header__about .arrow {
+  display: inline-block;
+  transform: rotate(-35deg);
+}
+
+.header__mail {
+  grid-column: 4 / span 1;
+  margin-left: auto;
+  font-size: 12px;
+}
+
+.studies-head {
+  display: flex;
+  flex-direction: column;
+  padding: 50px var(--grid-pad) 0;
+  margin-bottom: 120px;
+}
+
+@media (max-width: 767px) {
+  .studies-head {
+    padding-top: 70px;
+    margin-bottom: 60px;
+  }
+}
+
+.studies-head__contents {
+  align-items: end;
+  row-gap: 28px;
+}
+
+.solari-hero {
+  grid-column: 1 / span 3;
+  grid-row: 1;
+}
+
+@media (max-width: 767px) {
+  .solari-hero {
+    grid-column: 1 / span 4;
+  }
+}
+
+.solari-board {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.solari-board__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.solari-line {
+  display: flex;
+  gap: 3px;
+  margin: 0;
+}
+
+.solari-cell {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  width: clamp(18px, 2.5vw, 36px);
+  height: clamp(28px, 3.8vw, 52px);
+  overflow: hidden;
+  border-radius: 2px;
+  background: #1a1a1a;
+  color: #f4f1ea;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(14px, 1.9vw, 26px);
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  perspective: 180px;
+}
+
+.solari-cell::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  height: 1px;
+  background: #050505;
+}
+
+.solari-cell__top,
+.solari-cell__bottom {
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.solari-cell__top {
+  align-items: flex-end;
+  background: #222;
+  border-bottom: 1px solid #050505;
+}
+
+.solari-cell__bottom {
+  align-items: flex-start;
+  background: #141414;
+}
+
+.solari-cell__top span,
+.solari-cell__bottom span {
+  display: block;
+}
+
+.solari-cell__top span {
+  transform: translateY(50%);
+}
+
+.solari-cell__bottom span {
+  transform: translateY(-50%);
+}
+
+.solari-cell.is-flipping .solari-cell__top {
+  transform-origin: bottom;
+  animation: solari-flip 70ms linear;
+}
+
+@keyframes solari-flip {
+  from {
+    transform: rotateX(0deg);
+  }
+  to {
+    transform: rotateX(-90deg);
+  }
+}
+
+.studies-head__read {
+  grid-column: 4 / span 1;
+  grid-row: 1;
+  padding-bottom: 4px;
+}
+
+@media (max-width: 767px) {
+  .studies-head__read {
+    grid-column: 1 / span 4;
+    grid-row: 2;
+    padding-top: 8px;
+    padding-bottom: 0;
+  }
+}
+
+.studies-head__read-text {
+  margin: 0;
+  max-width: 18rem;
+  font-size: 12px;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.rise-clip {
+  overflow: hidden;
+}
+
+.rise {
+  display: block;
+  animation: rise-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: translateY(110%);
+}
+
+@keyframes rise-in {
+  to {
+    transform: translateY(0);
+  }
+}
+
+.studies-lists {
+  position: relative;
+  padding-inline: var(--grid-pad);
+}
+
+.studies-lists__contents {
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  padding-bottom: 24px;
+}
+
+.studies-lists__head {
+  pointer-events: none;
+  position: sticky;
+  top: 48px;
+  z-index: 1;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.studies-lists__head p {
+  margin: 0;
+  overflow: hidden;
+}
+
+.studies-lists__head [data-item="1"] {
+  grid-column: 1 / span 1;
+  padding-left: 150px;
+}
+
+.studies-lists__head [data-item="2"] {
+  grid-column: 2 / span 1;
+}
+
+.studies-lists__head [data-item="3"] {
+  grid-column: 4 / span 1;
+  padding-right: 90px;
+  text-align: right;
+}
+
+@media (max-width: 767px) {
+  .studies-lists__head {
+    display: none;
+  }
+}
+
+.studies-lists__group {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.studies-lists__year {
+  align-self: flex-start;
+  position: relative;
+  top: 4px;
+  min-width: 150px;
+  font-size: 12px;
+}
+
+@media (max-width: 767px) {
+  .studies-lists__year {
+    min-width: 92px;
+  }
+}
+
+.studies-lists__items {
+  width: calc(100% - 150px);
+}
+
+@media (max-width: 767px) {
+  .studies-lists__items {
+    width: calc(100% - 70px);
+  }
+}
+
+.list-link {
+  display: flex;
+  gap: 100px;
+  padding: 4px 0 6px;
+  position: relative;
+  font-size: 12px;
+}
+
+@media (max-width: 767px) {
+  .list-link {
+    gap: 24px;
+  }
+}
+
+.list-link .id {
+  min-width: 150px;
+  padding-left: 30px;
+}
+
+@media (max-width: 767px) {
+  .list-link .id {
+    min-width: 50px;
+    padding-left: 0;
+  }
+}
+
+.list-link .title {
+  overflow: hidden;
+}
+
+.list-link .title-inner {
+  display: inline-block;
+}
+
+@media (min-width: 768px) {
+  .list-link .title {
+    min-width: 240px;
+  }
+
+  .list-link .title-inner {
+    text-shadow: 0 -14px 0 var(--color-primary);
+    transition: transform 0.3s ease;
+  }
+
+  .list-link:hover .title-inner {
+    transform: translateY(14px);
+  }
+}
+
+.list-link .field {
+  margin-left: auto;
+  min-width: 100px;
+  text-align: right;
+}
+
+@media (max-width: 767px) {
+  .list-link .field {
+    display: none;
+  }
+}
+
+.list-link .line {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--color-line);
+}
+
+.studies-block {
+  display: grid;
+  min-height: 100svh;
+  align-content: center;
+  gap: 20px;
+  padding-inline: var(--grid-pad);
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  column-gap: var(--grid-gap);
+}
+
+.studies-block p {
+  grid-column: 2 / span 1;
+  margin: 0;
+  font-size: 12px;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+@media (max-width: 767px) {
+  .studies-block p {
+    grid-column: 2 / span 2;
+  }
+}
+
+.studies-block small {
+  display: block;
+  padding-top: 40px;
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+.snapshot-head {
+  padding: 50px var(--grid-pad) 60px;
+}
+
+.snapshot-head p {
+  margin: 0;
+  overflow: hidden;
+  font-size: clamp(50px, 8.33vw, 120px);
+  line-height: 1;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.snapshot-empty {
+  padding-inline: var(--grid-pad);
+  font-size: 12px;
+  text-transform: uppercase;
 }
