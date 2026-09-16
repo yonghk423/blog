@@ -2,6 +2,7 @@ import type {Metadata} from "next"
 import {Inter, Noto_Sans_KR} from "next/font/google"
 import {Header} from "@/components/header"
 import {site} from "@/lib/site"
+import {SanityLive} from "@/sanity/lib/live"
 import "./globals.css"
 
 const inter = Inter({
@@ -30,6 +31,7 @@ export default function RootLayout({children}: LayoutProps<"/">) {
       <body>
         <Header />
         {children}
+        <SanityLive />
       </body>
     </html>
   )
