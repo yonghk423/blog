@@ -1,3 +1,6 @@
+"use client"
+
+import {useState, type MouseEvent} from "react"
 import {site} from "@/lib/site"
 
 type Spot = {
@@ -5,6 +8,7 @@ type Spot = {
   href?: string
   delayMs: number
   spot: string
+  copyEmail?: boolean
 }
 
 const SPOTS: Spot[] = [
@@ -17,7 +21,7 @@ const SPOTS: Spot[] = [
   {text: "React Query", delayMs: 550, spot: "query"},
   {text: "contact", delayMs: 640, spot: "contact"},
   {text: "GitHub", href: site.github, delayMs: 720, spot: "github"},
-  {text: "Email", href: `mailto:${site.email}`, delayMs: 790, spot: "email"},
+  {text: "Email", href: `mailto:${site.email}`, delayMs: 790, spot: "email", copyEmail: true},
 ]
 
 function RiseWord({text, delayMs}: {text: string; delayMs: number}) {
@@ -30,11 +34,51 @@ function RiseWord({text, delayMs}: {text: string; delayMs: number}) {
   )
 }
 
+function EmailSpot({
+  className,
+  delayMs,
+}: {
+  className: string
+  delayMs: number
+}) {
+  const [label, setLabel] = useState("Email")
+
+  async function copyMail(event: MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault()
+    if (!site.email) return
+    try {
+      await navigator.clipboard.writeText(site.email)
+      setLabel("Copied")
+      window.setTimeout(() => setLabel("Email"), 2000)
+    } catch {
+      setLabel("Email")
+    }
+  }
+
+  return (
+    <a
+      className={`${className} studies-head__spot-link`}
+      href={`mailto:${site.email}`}
+      onClick={copyMail}
+    >
+      <RiseWord key={label} text={label} delayMs={label === "Copied" ? 0 : delayMs} />
+      <span className="studies-head__spot-arrow" aria-hidden="true">
+        <RiseWord text="→" delayMs={delayMs + 40} />
+      </span>
+    </a>
+  )
+}
+
 export function StudiesHeadLettering() {
   return (
     <aside className="studies-head__aside" aria-label="Skills and contact">
       {SPOTS.map((item) => {
         const className = `studies-head__spot studies-head__spot--${item.spot}`
+
+        if (item.copyEmail) {
+          return <EmailSpot key={item.spot} className={className} delayMs={item.delayMs} />
+        }
+
         const content = (
           <>
             <RiseWord text={item.text} delayMs={item.delayMs} />
