@@ -12,3 +12,44 @@ export const STUDIES_QUERY = defineQuery(`*[_type == "post" && defined(slug.curr
   ),
   "slug": slug.current
 }`)
+
+export const ABOUT_QUERY = defineQuery(`*[_type == "about" && _id == "about"][0]{
+  name,
+  role,
+  bio,
+  phone,
+  email,
+  profileImage{
+    _type,
+    alt,
+    hotspot,
+    crop,
+    asset->{
+      _id,
+      _type,
+      url,
+      metadata{
+        lqip,
+        dimensions
+      }
+    }
+  },
+  careers[]{
+    _key,
+    company,
+    role,
+    period,
+    summary
+  },
+  workProjects[]{
+    _key,
+    title,
+    summary,
+    tech,
+    highlights[]{
+      _key,
+      title,
+      items
+    }
+  }
+}`)

@@ -45,6 +45,7 @@ export type Project = {
 }
 
 export const about = {
+  name: "김용희",
   intro: [
     "서울에서 활동하는 프론트엔드 개발자 김용희입니다.",
     "인터페이스와 인터랙션을 중심으로 웹을 만듭니다.",
