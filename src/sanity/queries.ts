@@ -1,22 +1,38 @@
 import {defineQuery} from "next-sanity"
 
-export const STUDIES_QUERY = defineQuery(`*[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
-  "id": studyId,
-  title,
-  field,
-  publishedAt,
-  "href": select(
-    defined(externalUrl) => externalUrl,
-    defined(slug.current) => "/studies/" + slug.current,
-    null
-  ),
-  "slug": slug.current
+export const STUDIES_QUERY = defineQuery(`{
+  "posts": *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
+    title,
+    field,
+    publishedAt,
+    "href": select(
+      defined(externalUrl) => externalUrl,
+      defined(slug.current) => "/studies/" + slug.current,
+      null
+    ),
+    "slug": slug.current
+  },
+  "projects": *[_type == "project" && defined(slug.current)] | order(order asc) {
+    "projectSlug": slug.current,
+    "projectTitle": title,
+    chapters[]{
+      title,
+      field,
+      publishedAt,
+      "chapterSlug": slug.current
+    }
+  }
 }`)
 
 export const PROJECTS_NAV_QUERY = defineQuery(`*[_type == "project" && defined(slug.current)] | order(order asc) {
   _id,
   title,
-  "slug": slug.current
+  "slug": slug.current,
+  chapters[]{
+    _key,
+    title,
+    "slug": slug.current
+  }
 }`)
 
 export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current == $slug][0]{
@@ -25,7 +41,13 @@ export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current =
   summary,
   tech,
   body,
-  "slug": slug.current
+  "slug": slug.current,
+  chapters[]{
+    _key,
+    title,
+    "slug": slug.current,
+    body
+  }
 }`)
 
 export const ABOUT_QUERY = defineQuery(`*[_type == "about" && _id == "about"][0]{

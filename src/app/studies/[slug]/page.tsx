@@ -5,7 +5,6 @@ import {sanityFetch} from "@/sanity/lib/live"
 
 const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
   title,
-  studyId,
   field,
   publishedAt,
   excerpt,
@@ -15,7 +14,6 @@ const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
 
 type StudyPost = {
   title: string | null
-  studyId: string | null
   field: string | null
   publishedAt: string | null
   excerpt: string | null
@@ -40,9 +38,7 @@ export default async function StudyPage({params}: Props) {
   return (
     <main className="about">
       <section className="about-intro">
-        <p>
-          {post.studyId} · {post.field}
-        </p>
+        {post.field ? <p>{post.field}</p> : null}
         <p style={{fontSize: "20px", marginTop: "12px"}}>{post.title}</p>
         {post.excerpt ? <p style={{marginTop: "16px", opacity: 0.75}}>{post.excerpt}</p> : null}
         {post.body ? (

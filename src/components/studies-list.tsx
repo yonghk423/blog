@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import {useState} from "react"
 import {SolariLine} from "@/components/solari-board"
 import type {Study} from "@/lib/site"
@@ -16,9 +17,6 @@ function StudyRow({study, year}: {study: Study; year?: string}) {
     <>
       <p className="year">
         <span>{year}</span>
-      </p>
-      <p className="id">
-        <span>{study.id}</span>
       </p>
       <p className="title">
         {hover ? (
@@ -39,10 +37,20 @@ function StudyRow({study, year}: {study: Study; year?: string}) {
   }
 
   if (study.href) {
+    const isExternal = /^https?:\/\//.test(study.href)
+
+    if (isExternal) {
+      return (
+        <a href={study.href} className="list-link" target="_blank" rel="noreferrer" {...events}>
+          {inner}
+        </a>
+      )
+    }
+
     return (
-      <a href={study.href} className="list-link" target="_blank" rel="noreferrer" {...events}>
+      <Link href={study.href} className="list-link" {...events}>
         {inner}
-      </a>
+      </Link>
     )
   }
 
@@ -58,18 +66,13 @@ export function StudiesList({groups}: {groups: Group[]}) {
     <section className="studies-lists">
       <div className="studies-lists__head">
         <p className="year" />
-        <p className="id">
-          <span className="rise" style={{animationDelay: "200ms"}}>
-            id
-          </span>
-        </p>
         <p className="title">
-          <span className="rise" style={{animationDelay: "240ms"}}>
+          <span className="rise" style={{animationDelay: "200ms"}}>
             title
           </span>
         </p>
         <p className="field">
-          <span className="rise" style={{animationDelay: "280ms"}}>
+          <span className="rise" style={{animationDelay: "240ms"}}>
             field
           </span>
         </p>
@@ -80,7 +83,7 @@ export function StudiesList({groups}: {groups: Group[]}) {
           <div key={group.year} className="studies-lists__group">
             {group.items.map((study, index) => (
               <StudyRow
-                key={study.id}
+                key={study.href || `${study.year}-${study.title}`}
                 study={study}
                 year={index === 0 ? `${group.year} (${group.items.length})` : undefined}
               />

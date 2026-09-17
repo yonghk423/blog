@@ -25,6 +25,18 @@
   box-sizing: border-box;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 html,
 body {
   margin: 0;
@@ -280,7 +292,6 @@ button {
 
 .studies-lists {
   --year-w: 150px;
-  --id-w: 120px;
   position: relative;
   padding-inline: var(--grid-pad);
 }
@@ -288,7 +299,7 @@ button {
 .studies-lists__head,
 .list-link {
   display: grid;
-  grid-template-columns: var(--year-w) var(--id-w) minmax(0, 1fr) auto;
+  grid-template-columns: var(--year-w) minmax(0, 1fr) auto;
   column-gap: 24px;
   align-items: baseline;
 }
@@ -383,13 +394,12 @@ button {
 @media (max-width: 767px) {
   .studies-lists {
     --year-w: 92px;
-    --id-w: 58px;
   }
 
   .studies-lists__head,
   .list-link {
     column-gap: 12px;
-    grid-template-columns: var(--year-w) var(--id-w) minmax(0, 1fr);
+    grid-template-columns: var(--year-w) minmax(0, 1fr);
   }
 
   .studies-lists__head .field,
@@ -429,15 +439,49 @@ button {
 
 .about-sidebar__list {
   display: grid;
-  gap: 14px;
+  gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.about-sidebar__item {
+  display: grid;
+  gap: 6px;
+}
+
+.about-sidebar__project {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.about-sidebar__toggle {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  line-height: 1.35;
+  opacity: 0.55;
+}
+
+.about-sidebar__toggle:hover {
+  opacity: 1;
+}
+
+.about-sidebar__chevron {
+  display: inline-block;
+  width: 12px;
+  font-size: 11px;
+}
+
 .about-sidebar__link {
   display: grid;
   gap: 2px;
+  min-width: 0;
   color: inherit;
   text-decoration: none;
 }
@@ -453,6 +497,30 @@ button {
   opacity: 0.55;
 }
 
+.about-sidebar__chapters {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0 0 0 16px;
+  list-style: none;
+}
+
+.about-sidebar__chapter {
+  display: block;
+  font-size: 12px;
+  line-height: 1.4;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.65;
+}
+
+.about-sidebar__chapter:hover,
+.about-sidebar__chapter[aria-current="page"] {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .about-sidebar__link[aria-current="page"] .about-sidebar__title {
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -461,6 +529,18 @@ button {
 .project-page {
   max-width: 42rem;
   padding-top: 8px;
+}
+
+.project-page__chapter {
+  margin-top: 48px;
+  scroll-margin-top: 88px;
+}
+
+.project-page__chapter-title {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .project-page__back {

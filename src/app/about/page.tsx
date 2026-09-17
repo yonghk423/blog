@@ -1,6 +1,9 @@
 import type {Metadata} from "next"
-import Link from "next/link"
 import {SanityImage} from "@/components/sanity-image"
+import {
+  ProjectSidebar,
+  type ProjectNavItem,
+} from "@/components/project-sidebar"
 import {about as aboutFallback, site} from "@/lib/site"
 import {sanityFetch} from "@/sanity/lib/live"
 import {ABOUT_QUERY, PROJECTS_NAV_QUERY} from "@/sanity/queries"
@@ -29,12 +32,6 @@ type AboutCareer = {
   role: string | null
   period: string | null
   summary: string | null
-}
-
-type ProjectNavItem = {
-  _id: string
-  title: string | null
-  slug: string | null
 }
 
 type AboutData = {
@@ -76,26 +73,12 @@ export default async function AboutPage() {
   const github = about?.github || site.github
   const careers = about?.careers?.filter((item) => item.company) ?? []
   const workProjects = about?.workProjects?.filter((item) => item.title) ?? []
-  const projects = (nav as ProjectNavItem[] | null)?.filter((item) => item.slug && item.title) ?? []
+  const projects =
+    (nav as ProjectNavItem[] | null)?.filter((item) => item.slug && item.title) ?? []
 
   return (
     <main className="about">
-      {projects.length > 0 ? (
-        <aside className="about-sidebar">
-          <p className="about-sidebar__label">Project</p>
-          <nav aria-label="프로젝트 목록">
-            <ul className="about-sidebar__list">
-              {projects.map((project) => (
-                <li key={project._id}>
-                  <Link className="about-sidebar__link" href={`/projects/${project.slug}`}>
-                    <span className="about-sidebar__title">{project.title}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </aside>
-      ) : null}
+      <ProjectSidebar projects={projects} />
 
       <div className="about-content">
         <section className="about-intro">
