@@ -171,14 +171,202 @@ button {
 }
 
 .studies-head__contents {
-  align-items: end;
+  align-items: stretch;
   row-gap: 28px;
 }
 
 .solari-hero {
-  grid-column: 1 / span 4;
+  grid-column: 1 / span 2;
+  grid-row: 1;
+  justify-self: stretch;
+  align-self: start;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.solari-hero .solari-board {
+  --solari-w: clamp(12px, 1.9vw, 28px);
+}
+
+.studies-head__aside {
+  grid-column: 3 / span 2;
+  grid-row: 1;
+  align-self: stretch;
+  justify-self: stretch;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto auto auto auto;
+  column-gap: clamp(12px, 2vw, 28px);
+  row-gap: 10px;
+  min-width: 0;
+  min-height: 100%;
+  padding-left: clamp(8px, 1.5vw, 20px);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.studies-head__spot {
+  margin: 0;
+  width: fit-content;
+  max-width: 100%;
+  line-height: 1.15;
+}
+
+.studies-head__spot--skills {
+  grid-column: 1 / span 2;
   grid-row: 1;
   justify-self: start;
+  margin-bottom: 8px;
+  font-size: clamp(30px, 3.8vw, 48px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  text-transform: lowercase;
+}
+
+.studies-head__spot--react {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: start;
+  margin-top: 4px;
+  font-size: clamp(15px, 1.6vw, 19px);
+}
+
+.studies-head__spot--ts {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  margin-top: 22px;
+  font-size: clamp(15px, 1.6vw, 19px);
+}
+
+.studies-head__spot--next {
+  grid-column: 1;
+  grid-row: 3;
+  justify-self: center;
+  margin-left: 12%;
+  margin-top: 8px;
+  font-size: clamp(15px, 1.55vw, 18px);
+}
+
+.studies-head__spot--rn {
+  grid-column: 2;
+  grid-row: 3;
+  justify-self: start;
+  margin-top: 28px;
+  margin-left: 8%;
+  font-size: clamp(14px, 1.45vw, 17px);
+}
+
+.studies-head__spot--zustand {
+  grid-column: 1;
+  grid-row: 4;
+  justify-self: end;
+  margin-right: 8%;
+  margin-top: 6px;
+  font-size: clamp(14px, 1.5vw, 18px);
+}
+
+.studies-head__spot--query {
+  grid-column: 2;
+  grid-row: 4;
+  justify-self: center;
+  margin-top: 20px;
+  font-size: clamp(14px, 1.45vw, 17px);
+}
+
+.studies-head__spot--contact {
+  grid-column: 2;
+  grid-row: 6;
+  justify-self: end;
+  align-self: end;
+  margin-top: 36px;
+  font-size: clamp(28px, 3.4vw, 42px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  text-transform: lowercase;
+}
+
+.studies-head__spot--github {
+  grid-column: 1;
+  grid-row: 6;
+  justify-self: start;
+  align-self: end;
+  margin-bottom: 10px;
+  font-size: clamp(15px, 1.55vw, 18px);
+}
+
+.studies-head__spot--email {
+  grid-column: 1 / span 2;
+  grid-row: 7;
+  justify-self: end;
+  margin-top: 4px;
+  font-size: clamp(14px, 1.45vw, 17px);
+}
+
+.studies-head__spot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.studies-head__spot-link:hover {
+  opacity: 0.5;
+}
+
+.studies-head__spot-arrow {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9em;
+  transform: translateY(-0.06em);
+}
+
+.char-cover {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+}
+
+.char {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: rise-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (max-width: 767px) {
+  .solari-hero,
+  .studies-head__aside {
+    grid-column: 1 / span 4;
+    grid-row: auto;
+  }
+
+  .studies-head__aside {
+    min-height: 0;
+    margin-top: 12px;
+    padding-left: 0;
+    row-gap: 8px;
+  }
+
+  .studies-head__spot--skills,
+  .studies-head__spot--contact {
+    font-size: clamp(26px, 9vw, 36px);
+  }
+
+  .studies-head__spot--ts,
+  .studies-head__spot--rn,
+  .studies-head__spot--contact,
+  .studies-head__spot--email {
+    justify-self: start;
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .studies-head__spot--contact {
+    grid-column: 1 / span 2;
+    margin-top: 20px;
+  }
 }
 
 .solari-board {
@@ -613,6 +801,8 @@ button {
   width: 88%;
   margin-top: -16px;
   justify-self: start;
+  background: color-mix(in srgb, var(--color-primary) 4%, var(--color-secondary));
+  isolation: isolate;
 }
 
 .about-intro__main,
@@ -667,6 +857,7 @@ button {
   height: auto;
   display: block;
   object-fit: contain;
+  background: transparent;
 }
 
 .about-intro__name {

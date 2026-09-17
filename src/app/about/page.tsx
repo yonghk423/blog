@@ -43,7 +43,14 @@ type AboutData = {
   github: string | null
   profileImage: {
     alt?: string | null
-    asset?: {_ref?: string; _id?: string} | null
+    asset?: {
+      _ref?: string
+      _id?: string
+      metadata?: {
+        lqip?: string | null
+        dimensions?: {width?: number; height?: number} | null
+      } | null
+    } | null
   } | null
   careers: AboutCareer[] | null
   workProjects: AboutWorkProject[] | null
@@ -136,11 +143,12 @@ export default async function AboutPage() {
             <div className="about-intro__media">
               <SanityImage
                 value={about.profileImage}
-                width={1100}
-                height={1541}
+                width={900}
+                height={1260}
                 className="about-intro__photo"
                 priority
-                sizes="(max-width: 767px) 100vw, 340px"
+                sizes="(max-width: 767px) 88vw, 400px"
+                quality={72}
               />
             </div>
           ) : null}

@@ -4,7 +4,14 @@ import {urlFor} from "@/sanity/lib/image"
 
 type SanityImageValue = SanityImageSource & {
   alt?: string | null
-  asset?: {_ref?: string} | null
+  asset?: {
+    _ref?: string
+    _id?: string
+    metadata?: {
+      lqip?: string | null
+      dimensions?: {width?: number; height?: number} | null
+    } | null
+  } | null
 }
 
 type SanityImageProps = {
@@ -15,6 +22,7 @@ type SanityImageProps = {
   priority?: boolean
   sizes?: string
   fill?: boolean
+  quality?: number
 }
 
 export function SanityImage({
@@ -25,38 +33,36 @@ export function SanityImage({
   priority,
   sizes,
   fill = false,
+  quality = 75,
 }: SanityImageProps) {
   if (!value?.asset) return null
 
-  const builder = urlFor(value).width(width)
-  const src = (
-    height && !fill ? builder.height(height).fit("max") : builder
-  ).url()
+  const lqip = value.asset.metadata?.lqip || undefined
+  const resolvedHeight =
+    height ??
+    value.asset.metadata?.dimensions?.height ??
+    Math.round(width / 1.5)
 
-  if (fill) {
-    return (
-      <Image
-        className={className}
-        src={src}
-        alt={value.alt || ""}
-        fill
-        priority={priority}
-        sizes={sizes}
-      />
-    )
+  let builder = urlFor(value).width(width).quality(quality).auto("format")
+  if (height && !fill) {
+    builder = builder.height(height).fit("max")
+  }
+  const src = builder.url()
+
+  const shared = {
+    className,
+    src,
+    alt: value.alt || "",
+    priority,
+    sizes,
+    quality,
+    placeholder: (lqip ? "blur" : "empty") as "blur" | "empty",
+    ...(lqip ? {blurDataURL: lqip} : {}),
   }
 
-  const resolvedHeight = height ?? Math.round(width / 1.5)
+  if (fill) {
+    return <Image {...shared} fill />
+  }
 
-  return (
-    <Image
-      className={className}
-      src={src}
-      alt={value.alt || ""}
-      width={width}
-      height={resolvedHeight}
-      priority={priority}
-      sizes={sizes}
-    />
-  )
+  return <Image {...shared} width={width} height={resolvedHeight} />
 }
