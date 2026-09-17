@@ -3,6 +3,7 @@ export const site = {
   title: "김용희 - Portfolio",
   description: "portfolio site by Yonghee Kim, based in Seoul.",
   email: "yonghk423423@gmail.com",
+  github: "https://github.com/yonghk423",
 }
 
 export type Study = {
