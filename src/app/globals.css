@@ -616,8 +616,10 @@ button {
 .about {
   display: grid;
   grid-template-columns: 200px minmax(0, 1fr);
-  gap: 40px;
+  gap: 48px;
   align-items: start;
+  width: min(100%, 72rem);
+  margin-inline: auto;
   padding: 48px var(--grid-pad) 80px;
 }
 
@@ -732,7 +734,8 @@ button {
 }
 
 .project-page {
-  max-width: 56rem;
+  max-width: 48rem;
+  margin-inline: auto;
   padding-top: 8px;
 }
 
