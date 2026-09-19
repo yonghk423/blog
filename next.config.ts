@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
         hostname: "cdn.sanity.io",
       },
     ],
+    // Next 16 treats some NAT64 CDN lookups as private IPs and 400s the optimizer.
+    dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
   },
   async redirects() {
     return [

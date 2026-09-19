@@ -3,22 +3,37 @@
 import {useEffect, useState, type CSSProperties} from "react"
 
 const CHARS = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()-."
+const HANGUL_FLIPS = "가나다라마바사아자차카타파하"
+const HANGUL = /[\uAC00-\uD7A3\u1100-\u11FF\u3131-\u318E]/
 const LINES = ["HELLO", "THIS IS THE BLOG OF", "FRONTEND DEVELOPER", "YONGHEE KIM"]
 const TICK_MS = 28
 const STAGGER_MS = 18
 const LINE_STAGGER_MS = 90
 const HOLD_MS = 2000
 
+function charsetFor(target: string) {
+  if (CHARS.includes(target)) return CHARS
+  if (HANGUL.test(target)) {
+    return HANGUL_FLIPS.includes(target) ? ` ${HANGUL_FLIPS}` : ` ${HANGUL_FLIPS}${target}`
+  }
+  return ` ${target}`
+}
+
 function nextChar(current: string, target: string) {
   if (current === target) return current
-  const from = CHARS.includes(current) ? current : " "
-  const index = CHARS.indexOf(from)
-  return CHARS[(index + 1) % CHARS.length]
+  const charset = charsetFor(target)
+  const from = charset.includes(current) ? current : charset[0] ?? " "
+  const index = charset.indexOf(from)
+  return charset[(index + 1) % charset.length]
 }
 
 function stepsFromSpace(letter: string) {
-  const goal = CHARS.includes(letter) ? letter : " "
-  return CHARS.indexOf(goal)
+  return charsetFor(letter).indexOf(letter)
+}
+
+function toSolariLetter(letter: string) {
+  const upper = letter.toUpperCase()
+  return CHARS.includes(upper) ? upper : letter
 }
 
 function boardDuration() {
@@ -42,7 +57,7 @@ function SolariCell({
   tickMs?: number
   flipMs?: number
 }) {
-  const goal = CHARS.includes(target) ? target : " "
+  const goal = target
   const [char, setChar] = useState(" ")
   const [flipping, setFlipping] = useState(false)
 
@@ -73,7 +88,7 @@ function SolariCell({
 
   return (
     <span
-      className={`solari-cell${flipping ? " is-flipping" : ""}`}
+      className={`solari-cell${flipping ? " is-flipping" : ""}${HANGUL.test(goal) ? " solari-cell--kr" : ""}`}
       aria-hidden="true"
       style={{"--solari-flip-ms": `${flipMs}ms`} as CSSProperties}
     >
@@ -106,7 +121,7 @@ export function SolariLine({
   gapSpaces?: boolean
   className?: string
 }) {
-  const letters = text.toUpperCase().split("")
+  const letters = Array.from(text, toSolariLetter)
 
   return (
     <span className={className ? `solari-line ${className}` : "solari-line"}>

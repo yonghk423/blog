@@ -90,17 +90,9 @@ export default async function ProjectPage({params}: Props) {
                 <div className="project-page__body">
                   <PortableText value={chapter.body} />
                 </div>
-              ) : (
-                <p className="project-page__empty">챕터 본문은 Sanity Studio에서 작성할 수 있습니다.</p>
-              )}
+              ) : null}
             </section>
           ))}
-
-          {!project.body?.length && chapters.length === 0 ? (
-            <p className="project-page__empty">
-              프로젝트 소개와 챕터는 Sanity Studio에서 작성할 수 있습니다.
-            </p>
-          ) : null}
         </article>
       </div>
     </main>

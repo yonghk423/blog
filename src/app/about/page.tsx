@@ -148,7 +148,6 @@ export default async function AboutPage() {
                 className="about-intro__photo"
                 priority
                 sizes="(max-width: 767px) 88vw, 400px"
-                quality={72}
               />
             </div>
           ) : null}

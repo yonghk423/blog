@@ -400,7 +400,7 @@ button {
   border-radius: 3px;
   background: #1a1a1a;
   color: #f4f1ea;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-inter), var(--font-kr), sans-serif;
   font-size: calc(var(--solari-w) * 0.7);
   font-weight: 500;
   line-height: 1;
@@ -557,12 +557,25 @@ button {
   --solari-gap: 3px;
 }
 
+.solari-cell--kr {
+  width: calc(var(--solari-w) * 1.32);
+  font-size: calc(var(--solari-w) * 0.58);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .solari-line--list .solari-cell {
   border-radius: 3px;
   color: #fff8ee;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.04em;
+}
+
+.solari-line--list .solari-cell--kr {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .solari-line--list .solari-cell::after {
@@ -719,7 +732,7 @@ button {
 }
 
 .project-page {
-  max-width: 42rem;
+  max-width: 56rem;
   padding-top: 8px;
 }
 
@@ -781,10 +794,56 @@ button {
   margin: 0 0 1em;
 }
 
-.project-page__empty {
-  margin: 32px 0 0;
-  font-size: 14px;
-  opacity: 0.55;
+.project-page__body h3 {
+  margin: 1.75em 0 0.55em;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.project-page__body a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+.project-page__body strong {
+  font-weight: 600;
+}
+
+.project-page__body code {
+  font-family: var(--font-inter), ui-monospace, monospace;
+  font-size: 0.92em;
+  font-weight: 500;
+}
+
+.project-page__body ul,
+.project-page__body ol {
+  margin: 0 0 1em;
+  padding-left: 1.2em;
+}
+
+.project-page__body ul {
+  list-style: disc;
+}
+
+.project-page__body ol {
+  list-style: decimal;
+}
+
+.project-page__body li {
+  margin: 0 0 0.45em;
+  padding-left: 0.15em;
+}
+
+.project-page__body li:last-child {
+  margin-bottom: 0;
+}
+
+.project-page__body blockquote {
+  margin: 1.5em 0;
+  padding: 0 0 0 1em;
+  border-left: 2px solid var(--color-primary);
+  font-weight: 500;
 }
 
 .about-sidebar__link:hover .about-sidebar__title {
