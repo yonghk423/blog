@@ -45,6 +45,17 @@ export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current =
   chapters[]{
     _key,
     title,
+    "slug": slug.current
+  }
+}`)
+
+export const PROJECT_CHAPTER_QUERY = defineQuery(`*[_type == "project" && slug.current == $slug][0]{
+  _id,
+  title,
+  "slug": slug.current,
+  "chapter": chapters[slug.current == $chapter][0]{
+    _key,
+    title,
     "slug": slug.current,
     body
   }

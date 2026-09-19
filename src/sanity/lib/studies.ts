@@ -52,7 +52,7 @@ function chaptersToStudies(projects: SanityProjectForStudies[]): SanityStudy[] {
           title: chapter.title,
           field: chapter.field || project.projectTitle,
           publishedAt: chapter.publishedAt,
-          href: `/projects/${project.projectSlug}#${chapter.chapterSlug}`,
+          href: `/projects/${project.projectSlug}/${chapter.chapterSlug}`,
           slug: `${project.projectSlug}/${chapter.chapterSlug}`,
         },
       ]

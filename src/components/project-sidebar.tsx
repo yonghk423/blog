@@ -19,24 +19,19 @@ export type ProjectNavItem = {
 type ProjectSidebarProps = {
   projects: ProjectNavItem[]
   activeSlug?: string | null
+  activeChapter?: string | null
 }
 
-export function ProjectSidebar({projects, activeSlug = null}: ProjectSidebarProps) {
+export function ProjectSidebar({
+  projects,
+  activeSlug = null,
+  activeChapter = null,
+}: ProjectSidebarProps) {
   const [openSlug, setOpenSlug] = useState<string | null>(activeSlug)
-  const [activeChapter, setActiveChapter] = useState<string | null>(null)
 
   useEffect(() => {
     if (activeSlug) setOpenSlug(activeSlug)
   }, [activeSlug])
-
-  useEffect(() => {
-    const syncHash = () => {
-      setActiveChapter(window.location.hash.replace(/^#/, "") || null)
-    }
-    syncHash()
-    window.addEventListener("hashchange", syncHash)
-    return () => window.removeEventListener("hashchange", syncHash)
-  }, [])
 
   if (!projects.length) return null
 
@@ -90,7 +85,7 @@ export function ProjectSidebar({projects, activeSlug = null}: ProjectSidebarProp
                       <li key={chapter._key}>
                         <Link
                           className="about-sidebar__chapter"
-                          href={`/projects/${project.slug}#${chapter.slug}`}
+                          href={`/projects/${project.slug}/${chapter.slug}`}
                           aria-current={
                             isActive && activeChapter === chapter.slug ? "page" : undefined
                           }

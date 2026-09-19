@@ -6,7 +6,7 @@ import {
   ProjectSidebar,
   type ProjectNavItem,
 } from "@/components/project-sidebar"
-import {HashScroll} from "@/components/hash-scroll"
+import {ChapterHashRedirect} from "@/components/chapter-hash-redirect"
 import {sanityFetch} from "@/sanity/lib/live"
 import {PROJECT_QUERY, PROJECTS_NAV_QUERY} from "@/sanity/queries"
 
@@ -14,7 +14,6 @@ type ProjectChapter = {
   _key: string
   title: string | null
   slug: string | null
-  body: PortableTextBlock[] | null
 }
 
 type ProjectData = {
@@ -54,13 +53,14 @@ export default async function ProjectPage({params}: Props) {
   const project = data as ProjectData | null
   const projects =
     (nav as ProjectNavItem[] | null)?.filter((item) => item.slug && item.title) ?? []
-  const chapters = project?.chapters?.filter((chapter) => chapter.title) ?? []
+  const chapters =
+    project?.chapters?.filter((chapter) => chapter.title && chapter.slug) ?? []
 
   if (!project?.title) notFound()
 
   return (
     <main className="about">
-      <HashScroll />
+      <ChapterHashRedirect slug={slug} />
       <ProjectSidebar projects={projects} activeSlug={slug} />
 
       <div className="about-content">
@@ -79,20 +79,15 @@ export default async function ProjectPage({params}: Props) {
             </div>
           ) : null}
 
-          {chapters.map((chapter) => (
-            <section
-              key={chapter._key}
-              id={chapter.slug || chapter._key}
-              className="project-page__chapter"
-            >
-              <h2 className="project-page__chapter-title">{chapter.title}</h2>
-              {chapter.body?.length ? (
-                <div className="project-page__body">
-                  <PortableText value={chapter.body} />
-                </div>
-              ) : null}
-            </section>
-          ))}
+          {chapters.length > 0 ? (
+            <ul className="project-page__index">
+              {chapters.map((chapter) => (
+                <li key={chapter._key}>
+                  <Link href={`/projects/${slug}/${chapter.slug}`}>{chapter.title}</Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </article>
       </div>
     </main>
