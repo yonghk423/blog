@@ -18,7 +18,7 @@ const SPOTS: Spot[] = [
   {text: "Next.js", delayMs: 340, spot: "next"},
   {text: "React Native", delayMs: 410, spot: "rn"},
   {text: "Zustand", delayMs: 480, spot: "zustand"},
-  {text: "React Query", delayMs: 550, spot: "query"},
+  {text: "TanStack Query", delayMs: 550, spot: "query"},
   {text: "contact", delayMs: 640, spot: "contact"},
   {text: "GitHub", href: site.github, delayMs: 720, spot: "github"},
   {text: "Email", href: `mailto:${site.email}`, delayMs: 790, spot: "email", copyEmail: true},

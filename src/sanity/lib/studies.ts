@@ -1,4 +1,4 @@
-import type {Study} from "@/lib/site"
+import {studyYear, type Study} from "@/lib/site"
 
 export type SanityStudy = {
   title: string | null
@@ -13,6 +13,7 @@ type SanityProjectChapter = {
   field: string | null
   publishedAt: string | null
   chapterSlug: string | null
+  externalUrl?: string | null
 }
 
 type SanityProjectForStudies = {
@@ -29,13 +30,14 @@ export type SanityStudiesPayload = {
 export function toStudies(items: SanityStudy[]): Study[] {
   return items.flatMap((item) => {
     if (!item.title || !item.field || !item.publishedAt) return []
-    const year = new Date(item.publishedAt).getFullYear()
+    const year = studyYear(item.publishedAt)
     if (!Number.isFinite(year)) return []
     return [
       {
         title: item.title,
         field: item.field,
         year,
+        publishedAt: item.publishedAt,
         href: item.href || undefined,
       },
     ]
@@ -52,7 +54,9 @@ function chaptersToStudies(projects: SanityProjectForStudies[]): SanityStudy[] {
           title: chapter.title,
           field: chapter.field || project.projectTitle,
           publishedAt: chapter.publishedAt,
-          href: `/projects/${project.projectSlug}/${chapter.chapterSlug}`,
+          href:
+            chapter.externalUrl ||
+            `/projects/${project.projectSlug}/${chapter.chapterSlug}`,
           slug: `${project.projectSlug}/${chapter.chapterSlug}`,
         },
       ]
@@ -65,6 +69,9 @@ export function mergeStudies(payload: SanityStudiesPayload | null | undefined): 
   const fromProjects = chaptersToStudies(payload?.projects ?? [])
   return toStudies([...posts, ...fromProjects]).sort((a, b) => {
     if (a.year !== b.year) return b.year - a.year
+    if (a.publishedAt !== b.publishedAt) {
+      return a.publishedAt < b.publishedAt ? 1 : -1
+    }
     return a.title.localeCompare(b.title, "ko")
   })
 }

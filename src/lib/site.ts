@@ -10,7 +10,38 @@ export type Study = {
   title: string
   field: string
   year: number
+  publishedAt: string
   href?: string
+}
+
+const SEOUL_TZ = "Asia/Seoul"
+
+function seoulDateParts(iso: string) {
+  const date = new Date(iso)
+  if (!Number.isFinite(date.getTime())) return null
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: SEOUL_TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date)
+  const value = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value ?? ""
+  return {
+    year: Number(value("year")),
+    month: value("month"),
+    day: value("day"),
+  }
+}
+
+export function studyYear(iso: string) {
+  return seoulDateParts(iso)?.year ?? Number.NaN
+}
+
+export function formatStudyDate(iso: string) {
+  const parts = seoulDateParts(iso)
+  if (!parts) return ""
+  return `${parts.year}.${parts.month}.${parts.day}`
 }
 
 export const studies: Study[] = []

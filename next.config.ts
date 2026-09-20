@@ -23,6 +23,26 @@ const nextConfig: NextConfig = {
         destination: "/about",
         permanent: false,
       },
+      {
+        source: "/projects/worklist",
+        destination: "/projects/worklist/part1",
+        permanent: true,
+      },
+      {
+        source: "/projects/worklist/overview",
+        destination: "/projects/worklist/part1",
+        permanent: true,
+      },
+      {
+        source: "/projects/viewer",
+        destination: "/projects/viewer/part1",
+        permanent: true,
+      },
+      {
+        source: "/projects/viewer/overview",
+        destination: "/projects/viewer/part1",
+        permanent: true,
+      },
     ]
   },
 };

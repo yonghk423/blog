@@ -19,6 +19,7 @@ export const STUDIES_QUERY = defineQuery(`{
       title,
       field,
       publishedAt,
+      externalUrl,
       "chapterSlug": slug.current
     }
   }
@@ -31,7 +32,8 @@ export const PROJECTS_NAV_QUERY = defineQuery(`*[_type == "project" && defined(s
   chapters[]{
     _key,
     title,
-    "slug": slug.current
+    "slug": slug.current,
+    externalUrl
   }
 }`)
 
@@ -45,7 +47,8 @@ export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current =
   chapters[]{
     _key,
     title,
-    "slug": slug.current
+    "slug": slug.current,
+    externalUrl
   }
 }`)
 
@@ -57,6 +60,7 @@ export const PROJECT_CHAPTER_QUERY = defineQuery(`*[_type == "project" && slug.c
     _key,
     title,
     "slug": slug.current,
+    externalUrl,
     body
   }
 }`)

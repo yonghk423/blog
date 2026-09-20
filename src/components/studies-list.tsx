@@ -3,7 +3,7 @@
 import Link from "next/link"
 import {useState} from "react"
 import {SolariLine} from "@/components/solari-board"
-import type {Study} from "@/lib/site"
+import {formatStudyDate, type Study} from "@/lib/site"
 
 type Group = {
   year: number
@@ -17,6 +17,9 @@ function StudyRow({study, year}: {study: Study; year?: string}) {
     <>
       <p className="year">
         <span>{year}</span>
+      </p>
+      <p className="date">
+        <span>{formatStudyDate(study.publishedAt)}</span>
       </p>
       <p className="title">
         {hover ? (
@@ -66,6 +69,11 @@ export function StudiesList({groups}: {groups: Group[]}) {
     <section className="studies-lists">
       <div className="studies-lists__head">
         <p className="year" />
+        <p className="date">
+          <span className="rise" style={{animationDelay: "180ms"}}>
+            date
+          </span>
+        </p>
         <p className="title">
           <span className="rise" style={{animationDelay: "200ms"}}>
             title

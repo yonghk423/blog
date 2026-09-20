@@ -1,6 +1,7 @@
 import type {Metadata} from "next"
 import Link from "next/link"
-import {notFound} from "next/navigation"
+import {notFound, redirect} from "next/navigation"
+import {projectHasIndexPage} from "@/lib/projects"
 import {PortableText, type PortableTextBlock} from "next-sanity"
 import {
   ProjectSidebar,
@@ -57,6 +58,12 @@ export default async function ProjectPage({params}: Props) {
     project?.chapters?.filter((chapter) => chapter.title && chapter.slug) ?? []
 
   if (!project?.title) notFound()
+
+  if (!projectHasIndexPage(slug)) {
+    const firstChapter = chapters[0]
+    if (!firstChapter?.slug) notFound()
+    redirect(`/projects/${slug}/${firstChapter.slug}`)
+  }
 
   return (
     <main className="about">

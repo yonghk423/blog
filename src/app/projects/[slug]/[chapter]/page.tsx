@@ -1,7 +1,8 @@
 import type {Metadata} from "next"
 import Link from "next/link"
-import {notFound} from "next/navigation"
-import {PortableText, type PortableTextBlock} from "next-sanity"
+import {notFound, redirect} from "next/navigation"
+import {projectHasIndexPage} from "@/lib/projects"
+import {PortableText, stegaClean, type PortableTextBlock} from "next-sanity"
 import {
   ProjectSidebar,
   type ProjectNavItem,
@@ -17,6 +18,7 @@ type ChapterData = {
     _key: string
     title: string | null
     slug: string | null
+    externalUrl?: string | null
     body: PortableTextBlock[] | null
   } | null
 }
@@ -55,6 +57,11 @@ export default async function ProjectChapterPage({params}: Props) {
 
   if (!project?.title || !chapter?.title) notFound()
 
+  const externalUrl = stegaClean(chapter.externalUrl)
+  if (externalUrl) {
+    redirect(externalUrl)
+  }
+
   return (
     <main className="about">
       <ProjectSidebar
@@ -66,7 +73,11 @@ export default async function ProjectChapterPage({params}: Props) {
       <div className="about-content">
         <article className="project-page">
           <p className="project-page__back">
-            <Link href={`/projects/${slug}`}>← {project.title}</Link>
+            {projectHasIndexPage(slug) ? (
+              <Link href={`/projects/${slug}`}>← {project.title}</Link>
+            ) : (
+              <Link href="/about">← About</Link>
+            )}
           </p>
           <h1 className="project-page__title">{chapter.title}</h1>
           {chapter.body?.length ? (
