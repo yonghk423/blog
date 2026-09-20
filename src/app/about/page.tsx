@@ -64,6 +64,39 @@ function formatPhone(phone: string) {
   return phone
 }
 
+const BIO_HIGHLIGHTS = ["서비스의 확장성", "팀의 생산성"] as const
+
+function renderHighlightedText(text: string) {
+  const pattern = new RegExp(`(${BIO_HIGHLIGHTS.map(escapeRegExp).join("|")})`, "g")
+  const parts = text.split(pattern)
+
+  return parts.map((part, index) =>
+    BIO_HIGHLIGHTS.includes(part as (typeof BIO_HIGHLIGHTS)[number]) ? (
+      <mark key={`${part}-${index}`} className="about-intro__mark">
+        {part}
+        <span className="about-intro__crayon-check" aria-hidden="true">
+          <svg viewBox="0 0 28 24" fill="none">
+            <path
+              className="about-intro__crayon-check-soft"
+              d="M3.2 12.6c2.4 2 5.1 5 7.2 7.8C15.2 12.8 20.4 7.4 25.2 3.2"
+            />
+            <path
+              className="about-intro__crayon-check-stroke"
+              d="M3.8 12.2c2.1 1.85 4.7 4.6 6.7 7.4C14.9 12.6 19.9 7.5 24.6 3.6"
+            />
+          </svg>
+        </span>
+      </mark>
+    ) : (
+      <span key={`${part}-${index}`}>{part}</span>
+    ),
+  )
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+}
+
 export default async function AboutPage() {
   const [{data}, {data: nav}] = await Promise.all([
     sanityFetch({query: ABOUT_QUERY}),
@@ -110,7 +143,7 @@ export default async function AboutPage() {
                   <p key={paragraph}>
                     {paragraph.split("\n").map((line, index, lines) => (
                       <span key={`${paragraph}-${index}`}>
-                        {line}
+                        {renderHighlightedText(line)}
                         {index < lines.length - 1 ? <br /> : null}
                       </span>
                     ))}

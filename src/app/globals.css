@@ -796,9 +796,10 @@ button {
   margin-inline: 0;
   padding-top: 8px;
   font-family: var(--font-serif-kr), "Nanum Myeongjo", serif;
+  font-weight: 400;
   color: var(--color-primary);
   -webkit-font-smoothing: auto;
-  text-rendering: optimizeLegibility;
+  text-rendering: auto;
 }
 
 .project-page__index {
@@ -872,18 +873,21 @@ button {
 .project-page__body {
   margin-top: 36px;
   font-size: 15px;
-  line-height: 1.85;
+  font-weight: 400;
+  line-height: 1.9;
   letter-spacing: 0;
   color: var(--color-primary);
 }
 
 .project-page__body p {
   margin: 0 0 1.1em;
+  font-weight: 400;
 }
 
 .project-page__body h2,
 .project-page__body h3 {
-  display: inline-block;
+  display: block;
+  width: fit-content;
   margin: 1.9em 0 0.75em;
   padding: 0 4px 1px;
   border-radius: 2px;
@@ -926,19 +930,21 @@ button {
 }
 
 .project-page__body li {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
+  position: relative;
+  display: block;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 1.15em;
   font-size: 15px;
-  line-height: 1.85;
+  font-weight: 400;
+  line-height: 1.9;
   color: var(--color-primary);
 }
 
 .project-page__body ul > li::before {
   content: "•";
-  flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
   line-height: 1.85;
   color: var(--color-primary);
 }
@@ -953,17 +959,18 @@ button {
 
 .project-page__body ol > li::before {
   content: counter(project-list) ".";
-  flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
   line-height: 1.85;
-  min-width: 1.2em;
+  min-width: 1em;
 }
 
-.project-page__body li > * {
+.project-page__body li > p {
   margin: 0;
-  min-width: 0;
 }
 
-.project-page__body li > * + * {
+.project-page__body li > p + p {
   margin-top: 0.55em;
 }
 
@@ -1119,6 +1126,7 @@ button {
 }
 
 .about-intro__copy {
+  position: relative;
   display: grid;
   gap: 16px;
   margin-top: 20px;
@@ -1128,13 +1136,87 @@ button {
 .about-intro__copy p {
   margin: 0;
   font-family: var(--font-serif-kr), "Nanum Myeongjo", serif;
-  font-size: 14.5px;
+  font-size: 17px;
   font-weight: 400;
   line-height: 1.85;
   letter-spacing: 0;
   color: var(--color-primary);
   -webkit-font-smoothing: auto;
   text-rendering: optimizeLegibility;
+}
+
+.about-intro__mark {
+  position: relative;
+  padding: 0 3px 2px;
+  border-radius: 3px 4px 2px 5px / 4px 3px 5px 2px;
+  color: inherit;
+  background:
+    radial-gradient(120% 90% at 18% 70%, rgba(37, 99, 235, 0.38) 0%, transparent 55%),
+    radial-gradient(100% 80% at 78% 80%, rgba(37, 99, 235, 0.32) 0%, transparent 50%),
+    linear-gradient(
+      180deg,
+      transparent 42%,
+      rgba(37, 99, 235, 0.55) 52%,
+      rgba(37, 99, 235, 0.72) 78%,
+      rgba(29, 78, 216, 0.45) 100%
+    );
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.about-intro__crayon-check {
+  position: absolute;
+  top: -0.7em;
+  left: -0.18em;
+  width: 15px;
+  height: 13px;
+  pointer-events: none;
+  transform: rotate(-12deg);
+  animation: about-crayon-bob 3.8s ease-in-out infinite;
+}
+
+.about-intro__crayon-check svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.about-intro__crayon-check-soft {
+  fill: none;
+  stroke: #2563eb;
+  stroke-width: 5.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.55;
+}
+
+.about-intro__crayon-check-stroke {
+  fill: none;
+  stroke: #1d4ed8;
+  stroke-width: 3.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.92;
+}
+
+@keyframes about-crayon-bob {
+  0%,
+  100% {
+    opacity: 0.88;
+    transform: rotate(-12deg) translateY(0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(-6deg) translateY(-1.5px) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-intro__crayon-check {
+    animation: none;
+    opacity: 0.92;
+  }
 }
 
 .about-intro__contacts {
@@ -1422,7 +1504,7 @@ button {
   }
 
   .about-intro__copy p {
-    font-size: 13.5px;
+    font-size: 16px;
   }
 
   .about-career__company {
@@ -1468,7 +1550,7 @@ button {
   }
 
   .about-intro__copy p {
-    font-size: 15px;
+    font-size: 18px;
   }
 
   .about-career__company {
