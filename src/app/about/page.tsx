@@ -74,7 +74,7 @@ export default async function AboutPage() {
   const role = about?.role || "프론트엔드 개발자"
   const bio =
     about?.bio ||
-    aboutFallback.intro.join(" ")
+    aboutFallback.intro.join("\n\n")
   const phone = about?.phone || null
   const email = about?.email || site.email
   const github = about?.github || site.github
@@ -90,11 +90,32 @@ export default async function AboutPage() {
       <div className="about-content">
         <section className="about-intro">
           <div className="about-intro__body">
-            <h1 className="about-intro__name">
-              {name} <span className="about-intro__role">{role}</span>
-            </h1>
+            <div className="about-intro__heading">
+              <h1 className="about-intro__name">{name}</h1>
+              {role ? (
+                <>
+                  <span className="about-intro__divider" aria-hidden="true">
+                    |
+                  </span>
+                  <span className="about-intro__role">{role}</span>
+                </>
+              ) : null}
+            </div>
             <div className="about-intro__copy">
-              <p>{bio}</p>
+              {bio
+                .split(/\n\s*\n/)
+                .map((paragraph) => paragraph.trim())
+                .filter(Boolean)
+                .map((paragraph) => (
+                  <p key={paragraph}>
+                    {paragraph.split("\n").map((line, index, lines) => (
+                      <span key={`${paragraph}-${index}`}>
+                        {line}
+                        {index < lines.length - 1 ? <br /> : null}
+                      </span>
+                    ))}
+                  </p>
+                ))}
             </div>
             {(phone || email || github) && (
               <ul className="about-intro__contacts">
@@ -153,49 +174,76 @@ export default async function AboutPage() {
           ) : null}
         </section>
 
-        {careers.length > 0 ? (
-          <section className="about-section">
-            <h2 className="about-section__label">경력 사항</h2>
-            <ul className="about-career__list">
-              {careers.map((career) => (
-                <li key={career._key} className="about-career__item">
-                  <h3 className="about-career__company">
-                    {career.company}
-                    {career.role ? <span> | {career.role}</span> : null}
-                  </h3>
-                  {career.period ? <p className="about-career__meta">근무 기간: {career.period}</p> : null}
-                  {career.summary ? <p className="about-career__summary">주요 업무: {career.summary}</p> : null}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
+        {careers.length > 0 || workProjects.length > 0 ? (
+          <div className="about-resume">
+            {careers.map((career) => (
+              <header key={career._key} className="about-career">
+                <div className="about-career__heading">
+                  <h2 className="about-career__company">{career.company}</h2>
+                  {career.role ? (
+                    <>
+                      <span className="about-career__divider" aria-hidden="true">
+                        |
+                      </span>
+                      <span className="about-career__role">{career.role}</span>
+                    </>
+                  ) : null}
+                </div>
+                <div className="about-career__meta">
+                  {career.period ? (
+                    <p>
+                      <span className="about-career__label">근무 기간:</span> {career.period}
+                    </p>
+                  ) : null}
+                  {career.summary ? (
+                    <p>
+                      <span className="about-career__label">주요 업무:</span> {career.summary}
+                    </p>
+                  ) : null}
+                </div>
+              </header>
+            ))}
 
-        {workProjects.map((project) => (
-          <section key={project._key} id={project._key} className="about-section about-work">
-            <h2 className="about-work__title">{project.title}</h2>
-            {project.summary ? <p className="about-work__summary">{project.summary}</p> : null}
-            {project.tech?.length ? (
-              <p className="about-work__tech">주요 기술: {project.tech.join(", ")}</p>
-            ) : null}
-            {project.highlights?.length ? (
-              <ul className="about-work__highlights">
-                {project.highlights.map((highlight) => (
-                  <li key={highlight._key} className="about-work__highlight">
-                    <h3>{highlight.title}</h3>
-                    {highlight.items?.length ? (
-                      <ul>
-                        {highlight.items.map((item) => (
-                          <li key={item}>{item}</li>
-                        ))}
-                      </ul>
+            {workProjects.map((project, index) => (
+              <div key={project._key}>
+                {index > 0 ? <hr className="about-resume__rule" /> : null}
+                <article id={project._key} className="about-work">
+                  <div className="about-work__header">
+                    <h2 className="about-work__title">{project.title}</h2>
+                    {project.summary ? (
+                      <p className="about-work__summary">{project.summary}</p>
                     ) : null}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </section>
-        ))}
+                    {project.tech?.length ? (
+                      <p className="about-work__tech">
+                        <span className="about-work__tech-label">주요 기술:</span>{" "}
+                        {project.tech.join(", ")}
+                      </p>
+                    ) : null}
+                  </div>
+                  {project.highlights?.map((highlight) => (
+                    <section key={highlight._key} className="about-work__highlight">
+                      {highlight.title ? (
+                        <h3 className="about-work__highlight-title">{highlight.title}</h3>
+                      ) : null}
+                      {highlight.items?.length ? (
+                        <ul className="about-work__list">
+                          {highlight.items.map((item) => (
+                            <li key={item} className="about-work__item">
+                              <span className="about-work__bullet" aria-hidden="true">
+                                •
+                              </span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </section>
+                  ))}
+                </article>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
     </main>
   )

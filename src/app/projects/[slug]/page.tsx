@@ -78,7 +78,10 @@ export default async function ProjectPage({params}: Props) {
           <h1 className="project-page__title">{project.title}</h1>
           {project.summary ? <p className="project-page__summary">{project.summary}</p> : null}
           {project.tech?.length ? (
-            <p className="project-page__tech">주요 기술: {project.tech.join(", ")}</p>
+            <p className="project-page__tech">
+              <span className="project-page__tech-label">주요 기술:</span>{" "}
+              {project.tech.join(", ")}
+            </p>
           ) : null}
           {project.body?.length ? (
             <div className="project-page__body">

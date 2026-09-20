@@ -19,6 +19,7 @@
   --color-background: var(--color-secondary);
   --color-foreground: var(--color-primary);
   --font-sans: var(--font-kr), var(--font-inter), sans-serif;
+  --font-serif: var(--font-serif-kr), serif;
 }
 
 * {
@@ -791,26 +792,39 @@ button {
 }
 
 .project-page {
-  max-width: 48rem;
-  margin-inline: auto;
+  max-width: 940px;
+  margin-inline: 0;
   padding-top: 8px;
+  font-family: var(--font-serif-kr), "Nanum Myeongjo", serif;
+  color: var(--color-primary);
+  -webkit-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
 }
 
 .project-page__index {
   display: grid;
-  gap: 10px;
-  margin: 32px 0 0;
+  gap: 12px;
+  margin: 40px 0 0;
   padding: 0;
   list-style: none;
 }
 
 .project-page__index a {
   color: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-decoration: none;
   text-underline-offset: 3px;
 }
 
+.project-page__index a:hover {
+  text-decoration: underline;
+}
+
 .project-page__back {
-  margin: 0 0 24px;
+  margin: 0 0 28px;
+  font-family: var(--font-inter), var(--font-kr), sans-serif;
   font-size: 13px;
 }
 
@@ -827,39 +841,63 @@ button {
 
 .project-page__title {
   margin: 0;
-  font-size: 28px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--color-primary);
 }
 
 .project-page__summary {
   margin: 16px 0 0;
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 15.5px;
+  line-height: 1.85;
+  letter-spacing: 0;
+  color: var(--color-primary);
 }
 
 .project-page__tech {
-  margin: 16px 0 0;
-  font-size: 13px;
-  line-height: 1.5;
-  opacity: 0.65;
+  margin: 14px 0 0;
+  font-size: 14px;
+  line-height: 1.8;
+  letter-spacing: 0;
+  color: #1a1a1a;
+}
+
+.project-page__tech-label {
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 .project-page__body {
-  margin-top: 32px;
+  margin-top: 36px;
   font-size: 15px;
-  line-height: 1.7;
+  line-height: 1.85;
+  letter-spacing: 0;
+  color: var(--color-primary);
 }
 
 .project-page__body p {
-  margin: 0 0 1em;
+  margin: 0 0 1.1em;
 }
 
+.project-page__body h2,
 .project-page__body h3 {
-  margin: 1.75em 0 0.55em;
-  font-size: 16px;
-  font-weight: 500;
+  display: inline-block;
+  margin: 1.9em 0 0.75em;
+  padding: 0 4px 1px;
+  border-radius: 2px;
+  font-size: 17px;
+  font-weight: 700;
   letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: var(--color-primary);
+  background: linear-gradient(transparent 58%, rgba(167, 243, 208, 0.75) 58%);
+}
+
+.project-page__body h2:first-child,
+.project-page__body h3:first-child {
+  margin-top: 0;
 }
 
 .project-page__body a {
@@ -868,43 +906,101 @@ button {
 }
 
 .project-page__body strong {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .project-page__body code {
   font-family: var(--font-inter), ui-monospace, monospace;
-  font-size: 0.92em;
+  font-size: 0.9em;
   font-weight: 500;
+  -webkit-font-smoothing: antialiased;
 }
 
 .project-page__body ul,
 .project-page__body ol {
-  margin: 0 0 1em;
-  padding-left: 1.2em;
-}
-
-.project-page__body ul {
-  list-style: disc;
-}
-
-.project-page__body ol {
-  list-style: decimal;
+  margin: 0 0 1.25em;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
 }
 
 .project-page__body li {
-  margin: 0 0 0.45em;
-  padding-left: 0.15em;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--color-primary);
 }
 
-.project-page__body li:last-child {
-  margin-bottom: 0;
+.project-page__body ul > li::before {
+  content: "•";
+  flex-shrink: 0;
+  line-height: 1.85;
+  color: var(--color-primary);
+}
+
+.project-page__body ol {
+  counter-reset: project-list;
+}
+
+.project-page__body ol > li {
+  counter-increment: project-list;
+}
+
+.project-page__body ol > li::before {
+  content: counter(project-list) ".";
+  flex-shrink: 0;
+  line-height: 1.85;
+  min-width: 1.2em;
+}
+
+.project-page__body li > * {
+  margin: 0;
+  min-width: 0;
+}
+
+.project-page__body li > * + * {
+  margin-top: 0.55em;
 }
 
 .project-page__body blockquote {
-  margin: 1.5em 0;
+  margin: 1.75em 0;
   padding: 0 0 0 1em;
   border-left: 2px solid var(--color-primary);
-  font-weight: 500;
+  font-weight: 400;
+  font-size: 15.5px;
+  line-height: 1.85;
+}
+
+@media (min-width: 640px) {
+  .project-page__title {
+    font-size: 28px;
+  }
+
+  .project-page__summary {
+    font-size: 16px;
+  }
+
+  .project-page__tech {
+    font-size: 14.5px;
+  }
+
+  .project-page__body {
+    font-size: 15.5px;
+  }
+
+  .project-page__body h2,
+  .project-page__body h3 {
+    font-size: 18px;
+  }
+
+  .project-page__body li {
+    font-size: 15.5px;
+  }
 }
 
 .about-sidebar__link:hover .about-sidebar__title {
@@ -913,27 +1009,34 @@ button {
 }
 
 .about-intro {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: start;
+  position: relative;
+  display: block;
   padding: 0;
+  min-height: 560px;
 }
 
 .about-intro__media {
-  position: relative;
-  width: 88%;
-  margin-top: -16px;
-  justify-self: start;
-  background: color-mix(in srgb, var(--color-primary) 4%, var(--color-secondary));
+  position: absolute;
+  top: -32px;
+  right: 0;
+  z-index: 1;
+  width: min(54%, 480px);
+  margin: 0;
+  justify-self: unset;
+  background: transparent;
   isolation: isolate;
+  pointer-events: none;
 }
 
 .about-intro__main,
 .about-intro__body {
+  position: relative;
+  z-index: 2;
   width: 100%;
   min-width: 0;
+  max-width: none;
   padding-top: 88px;
+  padding-right: 0;
 }
 
 .about-section {
@@ -951,27 +1054,27 @@ button {
     linear-gradient(
       90deg,
       var(--color-secondary) 0%,
-      rgb(242 242 242 / 72%) 10%,
-      rgb(242 242 242 / 28%) 22%,
-      transparent 36%
+      rgb(242 242 242 / 55%) 8%,
+      rgb(242 242 242 / 22%) 18%,
+      transparent 32%
     ),
     linear-gradient(
       270deg,
       var(--color-secondary) 0%,
-      rgb(242 242 242 / 55%) 8%,
-      transparent 22%
+      rgb(242 242 242 / 25%) 5%,
+      transparent 12%
     ),
     linear-gradient(
       180deg,
       var(--color-secondary) 0%,
-      rgb(242 242 242 / 45%) 6%,
-      transparent 18%
+      rgb(242 242 242 / 20%) 4%,
+      transparent 12%
     ),
     linear-gradient(
       0deg,
       var(--color-secondary) 0%,
-      rgb(242 242 242 / 45%) 6%,
-      transparent 18%
+      rgb(242 242 242 / 40%) 8%,
+      transparent 22%
     );
   pointer-events: none;
 }
@@ -986,38 +1089,64 @@ button {
 
 .about-intro__name {
   margin: 0;
-  font-size: 24px;
-  font-weight: 500;
+  font-family: var(--font-serif-kr), "Nanum Myeongjo", serif;
+  font-size: 26px;
+  font-weight: 700;
   letter-spacing: -0.01em;
+  line-height: 1.25;
+  -webkit-font-smoothing: auto;
+}
+
+.about-intro__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.about-intro__divider {
+  color: #9ca3af;
+  font-weight: 400;
+  font-family: var(--font-serif-kr), "Nanum Myeongjo", serif;
 }
 
 .about-intro__role {
-  font-weight: 400;
-  opacity: 0.65;
+  font-family: var(--font-serif-kr), "Nanum Myeongjo", serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+  -webkit-font-smoothing: auto;
 }
 
 .about-intro__copy {
-  margin-top: 16px;
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+  max-width: min(44rem, 78%);
 }
 
-.about-intro__copy p,
-.about-career__summary,
-.about-work__summary,
-.about-work__highlight li {
+.about-intro__copy p {
   margin: 0;
-  max-width: none;
-  font-size: 15px;
-  line-height: 1.65;
+  font-family: var(--font-serif-kr), "Nanum Myeongjo", serif;
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.85;
+  letter-spacing: 0;
+  color: var(--color-primary);
+  -webkit-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
 }
 
 .about-intro__contacts {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 20px 0 0;
+  margin: 24px 0 0;
   padding: 0;
   list-style: none;
   font-size: 14px;
+  font-weight: 400;
+  color: #374151;
 }
 
 .about-intro__contacts a {
@@ -1045,81 +1174,160 @@ button {
   text-decoration: underline;
 }
 
-.about-section__label {
-  margin: 0 0 20px;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
+.about-resume {
+  width: 100%;
+  max-width: 940px;
+  margin-top: 56px;
+  color: var(--color-primary);
+  font-family: var(--font-serif-kr), "Nanum Myeongjo", serif;
+  font-weight: 400;
+  -webkit-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
 }
 
-.about-career__list,
-.about-work__highlights,
-.about-work__highlight ul {
+.about-career {
+  margin: 0 0 56px;
+  padding: 0 0 40px;
+  border-bottom: 1px solid rgb(209 213 219 / 80%);
+}
+
+.about-career__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.about-career__company {
   margin: 0;
-  padding: 0;
-  list-style: none;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--color-primary);
+  font-family: inherit;
 }
 
-.about-career__item {
+.about-career__divider {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.about-career__role {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.about-career__meta {
   display: grid;
   gap: 8px;
+  margin-top: 16px;
+  font-size: 15.5px;
+  line-height: 1.85;
+  letter-spacing: 0;
+  color: var(--color-primary);
 }
 
-.about-career__company,
-.about-work__title,
-.about-work__highlight h3 {
+.about-career__meta p {
   margin: 0;
-  font-size: 16px;
-  font-weight: 500;
 }
 
-.about-career__meta,
-.about-work__tech {
+.about-career__label {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.about-resume__rule {
+  margin: 56px 0;
+  border: 0;
+  border-top: 1px solid rgb(209 213 219 / 80%);
+}
+
+.about-work {
+  margin: 0 0 64px;
+  scroll-margin-top: 80px;
+}
+
+.about-work__header {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.about-work__title {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.5;
-  opacity: 0.65;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--color-primary);
+  font-family: inherit;
 }
 
 .about-work__summary {
-  margin-top: 12px;
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.85;
+  letter-spacing: 0;
+  color: var(--color-primary);
 }
 
 .about-work__tech {
-  margin-top: 12px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: 0;
+  color: #1a1a1a;
 }
 
-.about-work__highlights {
-  display: grid;
-  gap: 28px;
-  margin-top: 28px;
+.about-work__tech-label {
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 .about-work__highlight {
+  margin: 0 0 32px;
+}
+
+.about-work__highlight-title {
+  display: inline-block;
+  margin: 0 0 12px;
+  padding: 0 4px 1px;
+  border-radius: 2px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: var(--color-primary);
+  background: linear-gradient(transparent 58%, rgba(167, 243, 208, 0.75) 58%);
+  font-family: inherit;
+}
+
+.about-work__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
   display: grid;
   gap: 10px;
 }
 
-.about-work__highlight ul {
-  display: grid;
+.about-work__item {
+  display: flex;
   gap: 10px;
+  align-items: flex-start;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.85;
+  letter-spacing: 0;
+  color: var(--color-primary);
 }
 
-.about-work__highlight li {
-  position: relative;
-  padding-left: 12px;
-}
-
-.about-work__highlight li::before {
-  content: "";
-  position: absolute;
-  top: 0.55em;
-  left: 0;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.45;
+.about-work__bullet {
+  flex-shrink: 0;
+  line-height: 1.85;
+  color: var(--color-primary);
 }
 
 @media (max-width: 767px) {
@@ -1150,20 +1358,31 @@ button {
   }
 
   .about-intro {
+    display: grid;
     grid-template-columns: 1fr;
     gap: 24px;
+    min-height: 0;
   }
 
   .about-intro__body {
     max-width: none;
+    padding-right: 0;
+  }
+
+  .about-intro__copy {
+    max-width: none;
   }
 
   .about-intro__media {
+    position: relative;
+    top: 0;
+    right: 0;
     order: -1;
-    width: min(100%, 280px);
-    max-width: 280px;
+    width: min(100%, 320px);
+    max-width: 320px;
     margin: 0 auto;
     justify-self: center;
+    pointer-events: auto;
   }
 
   .about-intro__media::before {
@@ -1195,6 +1414,92 @@ button {
   }
 
   .about-intro__name {
-    font-size: 20px;
+    font-size: 24px;
+  }
+
+  .about-intro__role {
+    font-size: 18px;
+  }
+
+  .about-intro__copy p {
+    font-size: 13.5px;
+  }
+
+  .about-career__company {
+    font-size: 24px;
+  }
+
+  .about-career__role {
+    font-size: 18px;
+  }
+
+  .about-career__meta {
+    font-size: 14.5px;
+  }
+
+  .about-work__title {
+    font-size: 22px;
+  }
+
+  .about-work__summary {
+    font-size: 14.5px;
+  }
+
+  .about-work__tech {
+    font-size: 13.5px;
+  }
+
+  .about-work__highlight-title {
+    font-size: 16px;
+  }
+
+  .about-work__item {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 640px) {
+  .about-intro__name {
+    font-size: 28px;
+  }
+
+  .about-intro__role {
+    font-size: 22px;
+  }
+
+  .about-intro__copy p {
+    font-size: 15px;
+  }
+
+  .about-career__company {
+    font-size: 28px;
+  }
+
+  .about-career__role {
+    font-size: 22px;
+  }
+
+  .about-career__meta {
+    font-size: 16px;
+  }
+
+  .about-work__title {
+    font-size: 26px;
+  }
+
+  .about-work__summary {
+    font-size: 16px;
+  }
+
+  .about-work__tech {
+    font-size: 14.5px;
+  }
+
+  .about-work__highlight-title {
+    font-size: 18px;
+  }
+
+  .about-work__item {
+    font-size: 15.5px;
   }
 }
