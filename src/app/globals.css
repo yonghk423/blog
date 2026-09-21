@@ -654,6 +654,17 @@ button {
   opacity: 0.55;
 }
 
+.about-sidebar__meta {
+  margin: 6px 0 0;
+  font-family: var(--font-inter), var(--font-kr), sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5;
+  color: var(--color-primary);
+  opacity: 0.55;
+}
+
 .about-sidebar__list {
   display: grid;
   gap: 10px;
