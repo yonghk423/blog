@@ -256,7 +256,9 @@ export default async function AboutPage() {
                   {project.highlights?.map((highlight) => (
                     <section key={highlight._key} className="about-work__highlight">
                       {highlight.title ? (
-                        <h3 className="about-work__highlight-title">{highlight.title}</h3>
+                        <h3 className="about-work__highlight-title">
+                          <span className="pt-heading-mark">{highlight.title}</span>
+                        </h3>
                       ) : null}
                       {highlight.items?.length ? (
                         <ul className="about-work__list">

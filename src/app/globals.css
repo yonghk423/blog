@@ -895,19 +895,25 @@ button {
   font-weight: 400;
 }
 
+/* Per-line highlighter so wrapped headings stay underline-like */
+.pt-heading-mark {
+  padding: 0 4px 1px;
+  border-radius: 2px;
+  background: linear-gradient(transparent 58%, rgba(167, 243, 208, 0.75) 58%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .project-page__body h2,
 .project-page__body h3 {
   display: block;
-  width: fit-content;
   margin: 1.9em 0 0.75em;
-  padding: 0 4px 1px;
-  border-radius: 2px;
+  padding: 0;
   font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.4;
   color: var(--color-primary);
-  background: linear-gradient(transparent 58%, rgba(167, 243, 208, 0.75) 58%);
 }
 
 .project-page__body h2:first-child,
@@ -1385,16 +1391,14 @@ button {
 }
 
 .about-work__highlight-title {
-  display: inline-block;
+  display: block;
   margin: 0 0 12px;
-  padding: 0 4px 1px;
-  border-radius: 2px;
+  padding: 0;
   font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.4;
   color: var(--color-primary);
-  background: linear-gradient(transparent 58%, rgba(167, 243, 208, 0.75) 58%);
   font-family: inherit;
 }
 

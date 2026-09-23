@@ -2,7 +2,8 @@ import type {Metadata} from "next"
 import Link from "next/link"
 import {notFound, redirect} from "next/navigation"
 import {projectHasIndexPage} from "@/lib/projects"
-import {PortableText, type PortableTextBlock} from "next-sanity"
+import {type PortableTextBlock} from "next-sanity"
+import {PortableBody} from "@/components/portable-body"
 import {
   ProjectSidebar,
   type ProjectNavItem,
@@ -85,7 +86,7 @@ export default async function ProjectPage({params}: Props) {
           ) : null}
           {project.body?.length ? (
             <div className="project-page__body">
-              <PortableText value={project.body} />
+              <PortableBody value={project.body} />
             </div>
           ) : null}
 

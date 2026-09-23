@@ -2,7 +2,8 @@ import type {Metadata} from "next"
 import Link from "next/link"
 import {notFound, redirect} from "next/navigation"
 import {projectHasIndexPage} from "@/lib/projects"
-import {PortableText, stegaClean, type PortableTextBlock} from "next-sanity"
+import {stegaClean, type PortableTextBlock} from "next-sanity"
+import {PortableBody} from "@/components/portable-body"
 import {
   ProjectSidebar,
   type ProjectNavItem,
@@ -82,7 +83,7 @@ export default async function ProjectChapterPage({params}: Props) {
           <h1 className="project-page__title">{chapter.title}</h1>
           {chapter.body?.length ? (
             <div className="project-page__body">
-              <PortableText value={chapter.body} />
+              <PortableBody value={chapter.body} />
             </div>
           ) : null}
         </article>

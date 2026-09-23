@@ -1,8 +1,8 @@
 import type {Metadata} from "next"
 import Link from "next/link"
 import {notFound} from "next/navigation"
-import {PortableText, type PortableTextBlock} from "next-sanity"
-import {defineQuery} from "next-sanity"
+import {defineQuery, type PortableTextBlock} from "next-sanity"
+import {PortableBody} from "@/components/portable-body"
 import {formatStudyDate} from "@/lib/site"
 import {sanityFetch} from "@/sanity/lib/live"
 
@@ -71,7 +71,7 @@ export default async function StudyPage({params}: Props) {
           {post.excerpt ? <p className="project-page__summary">{post.excerpt}</p> : null}
           {post.body?.length ? (
             <div className="project-page__body">
-              <PortableText value={post.body} />
+              <PortableBody value={post.body} />
             </div>
           ) : null}
         </article>
