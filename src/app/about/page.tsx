@@ -5,7 +5,7 @@ import {
   type ProjectNavItem,
 } from "@/components/project-sidebar"
 import {about as aboutFallback, site} from "@/lib/site"
-import {sanityFetch} from "@/sanity/lib/live"
+import {sanityFetch} from "@/sanity/lib/fetch"
 import {ABOUT_QUERY, PROJECTS_NAV_QUERY} from "@/sanity/queries"
 
 export const metadata: Metadata = {

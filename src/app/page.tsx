@@ -3,7 +3,7 @@ import { StudiesHeadLettering } from "@/components/studies-head-lettering"
 import { StudiesList } from "@/components/studies-list"
 import { studies as fallbackStudies, studiesByYear } from "@/lib/site"
 import { mergeStudies, type SanityStudiesPayload } from "@/sanity/lib/studies"
-import { sanityFetch } from "@/sanity/lib/live"
+import { sanityFetch } from "@/sanity/lib/fetch"
 import { STUDIES_QUERY } from "@/sanity/queries"
 
 export default async function HomePage() {

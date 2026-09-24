@@ -9,7 +9,7 @@ import {
   type ProjectNavItem,
 } from "@/components/project-sidebar"
 import {ChapterHashRedirect} from "@/components/chapter-hash-redirect"
-import {sanityFetch} from "@/sanity/lib/live"
+import {sanityFetch} from "@/sanity/lib/fetch"
 import {PROJECT_QUERY, PROJECTS_NAV_QUERY} from "@/sanity/queries"
 
 type ProjectChapter = {

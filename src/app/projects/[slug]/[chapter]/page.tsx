@@ -8,7 +8,7 @@ import {
   ProjectSidebar,
   type ProjectNavItem,
 } from "@/components/project-sidebar"
-import {sanityFetch} from "@/sanity/lib/live"
+import {sanityFetch} from "@/sanity/lib/fetch"
 import {PROJECT_CHAPTER_QUERY, PROJECTS_NAV_QUERY} from "@/sanity/queries"
 
 type ChapterData = {

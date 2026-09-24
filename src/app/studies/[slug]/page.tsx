@@ -4,7 +4,7 @@ import {notFound} from "next/navigation"
 import {defineQuery, type PortableTextBlock} from "next-sanity"
 import {PortableBody} from "@/components/portable-body"
 import {formatStudyDate} from "@/lib/site"
-import {sanityFetch} from "@/sanity/lib/live"
+import {sanityFetch} from "@/sanity/lib/fetch"
 
 const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
   title,

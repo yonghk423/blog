@@ -365,6 +365,14 @@ button {
   text-decoration: none;
 }
 
+.header__theme-label::before {
+  content: "Dark";
+}
+
+html.dark .header__theme-label::before {
+  content: "Light";
+}
+
 .studies-head {
   display: flex;
   flex-direction: column;
