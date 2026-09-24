@@ -4,6 +4,7 @@ import {Header} from "@/components/header"
 import {ThemeProvider} from "@/components/theme-provider"
 import {site} from "@/lib/site"
 import {themeInitScript} from "@/lib/theme"
+import {SanityLive} from "@/sanity/lib/live"
 import "./globals.css"
 
 const inter = Inter({
@@ -46,6 +47,7 @@ export default function RootLayout({children}: LayoutProps<"/">) {
         <ThemeProvider>
           <Header />
           {children}
+          <SanityLive />
         </ThemeProvider>
       </body>
     </html>
