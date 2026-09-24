@@ -4,6 +4,7 @@ import Link from "next/link"
 import {usePathname} from "next/navigation"
 import {site} from "@/lib/site"
 import {MailButton} from "./mail-button"
+import {ThemeToggle} from "./theme-toggle"
 
 export function Header() {
   const pathname = usePathname()
@@ -24,7 +25,10 @@ export function Header() {
           <span>About</span>
           <span className="arrow">→</span>
         </Link>
-        <MailButton email={site.email} />
+        <div className="header__actions">
+          <ThemeToggle />
+          <MailButton email={site.email} />
+        </div>
       </div>
     </header>
   )

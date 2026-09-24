@@ -1,12 +1,120 @@
 @import "tailwindcss";
 
+@property --color-primary {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #050505;
+}
+
+@property --color-secondary {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f2f2f2;
+}
+
+@property --color-line {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #d4d4d4;
+}
+
+@property --color-muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #374151;
+}
+
+@property --color-subtle {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #9ca3af;
+}
+
+@property --color-tech {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #1a1a1a;
+}
+
+@property --color-border-soft {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgb(209 213 219 / 80%);
+}
+
+@property --solari-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #1a1a1a;
+}
+
+@property --solari-top {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #222222;
+}
+
+@property --solari-bottom {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #141414;
+}
+
+@property --solari-text {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f4f1ea;
+}
+
+@property --solari-seam {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #050505;
+}
+
+@property --solari-list-text {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #fff8ee;
+}
+
 :root {
   --color-primary: #050505;
   --color-secondary: #f2f2f2;
   --color-line: #d4d4d4;
+  --color-muted: #374151;
+  --color-subtle: #9ca3af;
+  --color-tech: #1a1a1a;
+  --color-border-soft: rgb(209 213 219 / 80%);
+  --color-fade: 242 242 242;
+  --solari-bg: #1a1a1a;
+  --solari-top: #222;
+  --solari-bottom: #141414;
+  --solari-text: #f4f1ea;
+  --solari-seam: #050505;
+  --solari-list-text: #fff8ee;
+  --theme-duration: 0.55s;
+  --theme-ease: cubic-bezier(0.4, 0, 0.2, 1);
   --grid-cols: 4;
   --grid-gap: 10px;
   --grid-pad: 20px;
+}
+
+html.dark {
+  --color-primary: #f2f2f2;
+  --color-secondary: #0a0a0a;
+  --color-line: #2a2a2a;
+  --color-muted: #a3a3a3;
+  --color-subtle: #737373;
+  --color-tech: #d4d4d4;
+  --color-border-soft: rgb(64 64 64 / 80%);
+  --color-fade: 10 10 10;
+  --solari-bg: #f2f2f2;
+  --solari-top: #ffffff;
+  --solari-bottom: #e8e8e8;
+  --solari-text: #050505;
+  --solari-seam: #9a9a9a;
+  --solari-list-text: #050505;
 }
 
 @media (max-width: 767px) {
@@ -49,6 +157,98 @@ body {
 html {
   scrollbar-width: none;
   color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.theme-animated {
+  transition:
+    --color-primary var(--theme-duration) var(--theme-ease),
+    --color-secondary var(--theme-duration) var(--theme-ease),
+    --color-line var(--theme-duration) var(--theme-ease),
+    --color-muted var(--theme-duration) var(--theme-ease),
+    --color-subtle var(--theme-duration) var(--theme-ease),
+    --color-tech var(--theme-duration) var(--theme-ease),
+    --color-border-soft var(--theme-duration) var(--theme-ease),
+    --solari-bg var(--theme-duration) var(--theme-ease),
+    --solari-top var(--theme-duration) var(--theme-ease),
+    --solari-bottom var(--theme-duration) var(--theme-ease),
+    --solari-text var(--theme-duration) var(--theme-ease),
+    --solari-seam var(--theme-duration) var(--theme-ease),
+    --solari-list-text var(--theme-duration) var(--theme-ease),
+    background-color var(--theme-duration) var(--theme-ease),
+    color var(--theme-duration) var(--theme-ease);
+}
+
+html.theme-animated,
+html.theme-animated body,
+html.theme-animated .studies-lists__head,
+html.theme-animated .solari-cell,
+html.theme-animated .solari-cell__top,
+html.theme-animated .solari-cell__bottom,
+html.theme-animated .solari-cell::after,
+html.theme-animated .list-link::after,
+html.theme-animated .about-career,
+html.theme-animated .about-resume__rule,
+html.theme-animated .hover-line span::after {
+  transition:
+    background-color var(--theme-duration) var(--theme-ease),
+    color var(--theme-duration) var(--theme-ease),
+    border-color var(--theme-duration) var(--theme-ease),
+    background var(--theme-duration) var(--theme-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-animated,
+  html.theme-animated body,
+  html.theme-animated .studies-lists__head,
+  html.theme-animated .solari-cell,
+  html.theme-animated .solari-cell__top,
+  html.theme-animated .solari-cell__bottom,
+  html.theme-animated .solari-cell::after,
+  html.theme-animated .list-link::after,
+  html.theme-animated .about-career,
+  html.theme-animated .about-resume__rule,
+  html.theme-animated .hover-line span::after {
+    transition: none;
+  }
+}
+
+@supports (view-transition-name: root) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.55s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  ::view-transition-old(root) {
+    animation-name: theme-fade-out;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: theme-fade-in;
+  }
+
+  @keyframes theme-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes theme-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+    }
+  }
 }
 
 body {
@@ -149,9 +349,17 @@ button {
   transform: rotate(-35deg);
 }
 
-.header__mail {
+.header__actions {
   grid-column: 4 / span 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 16px;
   margin-left: auto;
+}
+
+.header__theme,
+.header__mail {
   font-size: 12px;
   color: inherit;
   text-decoration: none;
@@ -399,8 +607,8 @@ button {
   height: calc(var(--solari-w) * 1.48);
   overflow: hidden;
   border-radius: 3px;
-  background: #1a1a1a;
-  color: #f4f1ea;
+  background-color: var(--solari-bg);
+  color: var(--solari-text);
   font-family: var(--font-inter), var(--font-kr), sans-serif;
   font-size: calc(var(--solari-w) * 0.7);
   font-weight: 500;
@@ -417,7 +625,7 @@ button {
   left: 0;
   z-index: 2;
   height: 1px;
-  background: #050505;
+  background-color: var(--solari-seam);
 }
 
 .solari-cell__top,
@@ -429,13 +637,13 @@ button {
 
 .solari-cell__top {
   align-items: flex-end;
-  background: #222;
-  border-bottom: 1px solid #050505;
+  background-color: var(--solari-top);
+  border-bottom: 1px solid var(--solari-seam);
 }
 
 .solari-cell__bottom {
   align-items: flex-start;
-  background: #141414;
+  background-color: var(--solari-bottom);
 }
 
 .solari-cell__top span,
@@ -568,7 +776,7 @@ button {
 
 .solari-line--list .solari-cell {
   border-radius: 3px;
-  color: #fff8ee;
+  color: var(--solari-list-text);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -873,7 +1081,7 @@ button {
   font-size: 14px;
   line-height: 1.8;
   letter-spacing: 0;
-  color: #1a1a1a;
+  color: var(--color-tech);
 }
 
 .project-page__tech-label {
@@ -1078,26 +1286,26 @@ button {
     linear-gradient(
       90deg,
       var(--color-secondary) 0%,
-      rgb(242 242 242 / 55%) 8%,
-      rgb(242 242 242 / 22%) 18%,
+      rgb(var(--color-fade) / 55%) 8%,
+      rgb(var(--color-fade) / 22%) 18%,
       transparent 32%
     ),
     linear-gradient(
       270deg,
       var(--color-secondary) 0%,
-      rgb(242 242 242 / 25%) 5%,
+      rgb(var(--color-fade) / 25%) 5%,
       transparent 12%
     ),
     linear-gradient(
       180deg,
       var(--color-secondary) 0%,
-      rgb(242 242 242 / 20%) 4%,
+      rgb(var(--color-fade) / 20%) 4%,
       transparent 12%
     ),
     linear-gradient(
       0deg,
       var(--color-secondary) 0%,
-      rgb(242 242 242 / 40%) 8%,
+      rgb(var(--color-fade) / 40%) 8%,
       transparent 22%
     );
   pointer-events: none;
@@ -1129,7 +1337,7 @@ button {
 }
 
 .about-intro__divider {
-  color: #9ca3af;
+  color: var(--color-subtle);
   font-weight: 400;
   font-family: var(--font-serif-kr), "Nanum Myeongjo", serif;
 }
@@ -1245,7 +1453,7 @@ button {
   list-style: none;
   font-size: 14px;
   font-weight: 400;
-  color: #374151;
+  color: var(--color-muted);
 }
 
 .about-intro__contacts a {
@@ -1287,7 +1495,7 @@ button {
 .about-career {
   margin: 0 0 56px;
   padding: 0 0 40px;
-  border-bottom: 1px solid rgb(209 213 219 / 80%);
+  border-bottom: 1px solid var(--color-border-soft);
 }
 
 .about-career__heading {
@@ -1308,7 +1516,7 @@ button {
 }
 
 .about-career__divider {
-  color: #9ca3af;
+  color: var(--color-subtle);
   font-weight: 400;
 }
 
@@ -1340,7 +1548,7 @@ button {
 .about-resume__rule {
   margin: 56px 0;
   border: 0;
-  border-top: 1px solid rgb(209 213 219 / 80%);
+  border-top: 1px solid var(--color-border-soft);
 }
 
 .about-work {
@@ -1378,7 +1586,7 @@ button {
   font-weight: 400;
   line-height: 1.8;
   letter-spacing: 0;
-  color: #1a1a1a;
+  color: var(--color-tech);
 }
 
 .about-work__tech-label {
@@ -1487,25 +1695,25 @@ button {
       linear-gradient(
         180deg,
         var(--color-secondary) 0%,
-        rgb(242 242 242 / 40%) 8%,
+        rgb(var(--color-fade) / 40%) 8%,
         transparent 22%
       ),
       linear-gradient(
         0deg,
         var(--color-secondary) 0%,
-        rgb(242 242 242 / 55%) 12%,
+        rgb(var(--color-fade) / 55%) 12%,
         transparent 32%
       ),
       linear-gradient(
         90deg,
         var(--color-secondary) 0%,
-        rgb(242 242 242 / 35%) 8%,
+        rgb(var(--color-fade) / 35%) 8%,
         transparent 20%
       ),
       linear-gradient(
         270deg,
         var(--color-secondary) 0%,
-        rgb(242 242 242 / 35%) 8%,
+        rgb(var(--color-fade) / 35%) 8%,
         transparent 20%
       );
   }
