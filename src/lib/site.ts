@@ -1,7 +1,8 @@
 export const site = {
   name: "김용희",
   title: "김용희 - Portfolio",
-  description: "portfolio site by Yonghee Kim, based in Seoul.",
+  description:
+    "서울에서 활동하는 프론트엔드 개발자 김용희의 포트폴리오. Studies와 Projects를 기록합니다.",
   email: "yonghk423423@gmail.com",
   github: "https://github.com/yonghk423",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://www.yong-hee.com",

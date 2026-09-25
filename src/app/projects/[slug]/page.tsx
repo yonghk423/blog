@@ -2,7 +2,7 @@ import type {Metadata} from "next"
 import Link from "next/link"
 import {notFound, redirect} from "next/navigation"
 import {projectHasIndexPage} from "@/lib/projects"
-import {site} from "@/lib/site"
+import {pageMetadata} from "@/lib/seo"
 import {type PortableTextBlock} from "next-sanity"
 import {PortableBody} from "@/components/portable-body"
 import {
@@ -42,18 +42,12 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
   })
   const project = data as ProjectData | null
 
-  return {
+  return pageMetadata({
     title: project?.title || "Project",
     description: project?.summary || undefined,
-    openGraph: project?.title
-      ? {
-          title: project.title,
-          description: project.summary || site.description,
-          url: `/projects/${slug}`,
-          type: "article",
-        }
-      : undefined,
-  }
+    path: `/projects/${slug}`,
+    type: "article",
+  })
 }
 
 export default async function ProjectPage({params}: Props) {

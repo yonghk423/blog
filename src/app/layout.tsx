@@ -1,7 +1,9 @@
 import type {Metadata} from "next"
 import {Inter, Nanum_Myeongjo, Noto_Sans_KR} from "next/font/google"
 import {Header} from "@/components/header"
+import {JsonLd} from "@/components/json-ld"
 import {ThemeProvider} from "@/components/theme-provider"
+import {absoluteUrl} from "@/lib/seo"
 import {site} from "@/lib/site"
 import {themeInitScript} from "@/lib/theme"
 import {SanityLive} from "@/sanity/lib/live"
@@ -32,6 +34,9 @@ export const metadata: Metadata = {
     template: `%s - ${site.name}`,
   },
   description: site.description,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: site.title,
     description: site.description,
@@ -39,6 +44,31 @@ export const metadata: Metadata = {
     siteName: site.name,
     locale: "ko_KR",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.title,
+    description: site.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+}
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.name,
+  url: site.siteUrl,
+  description: site.description,
+  inLanguage: "ko-KR",
+  author: {
+    "@type": "Person",
+    name: site.name,
+    url: absoluteUrl("/about"),
+    email: site.email,
+    sameAs: [site.github],
   },
 }
 
@@ -53,6 +83,7 @@ export default function RootLayout({children}: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{__html: themeInitScript}} />
       </head>
       <body>
+        <JsonLd data={websiteJsonLd} />
         <ThemeProvider>
           <Header />
           {children}

@@ -1,22 +1,21 @@
 import type {Metadata} from "next"
+import {JsonLd} from "@/components/json-ld"
 import {SanityImage} from "@/components/sanity-image"
 import {
   ProjectSidebar,
   type ProjectNavItem,
 } from "@/components/project-sidebar"
+import {pageMetadata} from "@/lib/seo"
 import {about as aboutFallback, site} from "@/lib/site"
 import {sanityFetch} from "@/sanity/lib/live"
 import {ABOUT_QUERY, PROJECTS_NAV_QUERY} from "@/sanity/queries"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description: site.description,
-  openGraph: {
-    title: "About",
-    description: site.description,
-    url: "/about",
-  },
-}
+  path: "/about",
+})
+
 
 type AboutHighlight = {
   _key: string
@@ -122,8 +121,21 @@ export default async function AboutPage() {
   const projects =
     (nav as ProjectNavItem[] | null)?.filter((item) => item.slug && item.title) ?? []
 
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name,
+    jobTitle: role,
+    description: bio.replace(/\n+/g, " ").trim(),
+    url: site.siteUrl,
+    email,
+    sameAs: [github].filter(Boolean),
+    ...(phone ? {telephone: phone} : {}),
+  }
+
   return (
     <main className="about">
+      <JsonLd data={personJsonLd} />
       <ProjectSidebar projects={projects} />
 
       <div className="about-content">
