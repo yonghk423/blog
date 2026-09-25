@@ -2,6 +2,7 @@ import type {Metadata} from "next"
 import Link from "next/link"
 import {notFound, redirect} from "next/navigation"
 import {projectHasIndexPage} from "@/lib/projects"
+import {site} from "@/lib/site"
 import {type PortableTextBlock} from "next-sanity"
 import {PortableBody} from "@/components/portable-body"
 import {
@@ -43,6 +44,15 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
 
   return {
     title: project?.title || "Project",
+    description: project?.summary || undefined,
+    openGraph: project?.title
+      ? {
+          title: project.title,
+          description: project.summary || site.description,
+          url: `/projects/${slug}`,
+          type: "article",
+        }
+      : undefined,
   }
 }
 

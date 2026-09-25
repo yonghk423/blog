@@ -1,5 +1,20 @@
 import {defineQuery} from "next-sanity"
 
+export const SITEMAP_QUERY = defineQuery(`{
+  "posts": *[_type == "post" && defined(slug.current) && !defined(externalUrl)]{
+    "slug": slug.current,
+    _updatedAt
+  },
+  "projects": *[_type == "project" && defined(slug.current)]{
+    "slug": slug.current,
+    _updatedAt,
+    chapters[]{
+      "slug": slug.current,
+      externalUrl
+    }
+  }
+}`)
+
 export const STUDIES_QUERY = defineQuery(`{
   "posts": *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
     title,

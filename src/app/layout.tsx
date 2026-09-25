@@ -26,11 +26,20 @@ const serifKr = Nanum_Myeongjo({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.siteUrl),
   title: {
     default: site.title,
     template: `%s - ${site.name}`,
   },
   description: site.description,
+  openGraph: {
+    title: site.title,
+    description: site.description,
+    url: "/",
+    siteName: site.name,
+    locale: "ko_KR",
+    type: "website",
+  },
 }
 
 export default function RootLayout({children}: LayoutProps<"/">) {

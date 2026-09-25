@@ -3,14 +3,13 @@ import Link from "next/link"
 import {notFound} from "next/navigation"
 import {defineQuery, type PortableTextBlock} from "next-sanity"
 import {PortableBody} from "@/components/portable-body"
-import {formatStudyDate} from "@/lib/site"
+import {formatStudyDate, site} from "@/lib/site"
 import {sanityFetch} from "@/sanity/lib/live"
 
 const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
   title,
   field,
   publishedAt,
-  excerpt,
   body,
   "slug": slug.current
 }`)
@@ -19,7 +18,6 @@ type StudyPost = {
   title: string | null
   field: string | null
   publishedAt: string | null
-  excerpt: string | null
   body: PortableTextBlock[] | null
   slug: string | null
 }
@@ -39,6 +37,17 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
 
   return {
     title: post?.title || "Study",
+    description: post?.title
+      ? `${post.title}${post.field ? ` · ${post.field}` : ""}`
+      : undefined,
+    openGraph: post?.title
+      ? {
+          title: post.title,
+          description: post.field || site.description,
+          url: `/studies/${slug}`,
+          type: "article",
+        }
+      : undefined,
   }
 }
 
@@ -68,7 +77,6 @@ export default async function StudyPage({params}: Props) {
             <Link href="/">← Studies</Link>
           </p>
           <h1 className="project-page__title">{post.title}</h1>
-          {post.excerpt ? <p className="project-page__summary">{post.excerpt}</p> : null}
           {post.body?.length ? (
             <div className="project-page__body">
               <PortableBody value={post.body} />

@@ -4,6 +4,8 @@ export const site = {
   description: "portfolio site by Yonghee Kim, based in Seoul.",
   email: "yonghk423423@gmail.com",
   github: "https://github.com/yonghk423",
+  siteUrl:
+    process.env.NEXT_PUBLIC_SITE_URL || "https://yonghee-blog.vercel.app",
 }
 
 export type Study = {

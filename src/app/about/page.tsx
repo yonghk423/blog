@@ -10,6 +10,12 @@ import {ABOUT_QUERY, PROJECTS_NAV_QUERY} from "@/sanity/queries"
 
 export const metadata: Metadata = {
   title: "About",
+  description: site.description,
+  openGraph: {
+    title: "About",
+    description: site.description,
+    url: "/about",
+  },
 }
 
 type AboutHighlight = {
