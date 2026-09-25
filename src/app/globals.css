@@ -1139,7 +1139,15 @@ html.dark .header__theme-label::before {
 
 .project-page__body a {
   color: inherit;
+  text-decoration: underline;
   text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
+  transition: text-decoration-color 0.15s ease;
+}
+
+.project-page__body a:hover {
+  text-decoration-color: var(--color-primary);
 }
 
 .project-page__body strong {
@@ -1151,6 +1159,85 @@ html.dark .header__theme-label::before {
   font-size: 0.9em;
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
+}
+
+.pt-code {
+  margin: 1.5em 0 1.75em;
+  border: 1px solid var(--color-line);
+  overflow: hidden;
+}
+
+.pt-code__meta {
+  margin: 0;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-line);
+  font-family: var(--font-inter), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+.pt-code__pre {
+  margin: 0;
+  padding: 14px 12px;
+  overflow-x: auto;
+  background: color-mix(in srgb, var(--color-primary) 4%, var(--color-secondary));
+}
+
+.pt-code__code {
+  display: block;
+  font-family: var(--font-inter), ui-monospace, monospace;
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0;
+  white-space: pre;
+  color: var(--color-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+.pt-table-wrap {
+  margin: 1.5em 0 1.75em;
+  overflow-x: auto;
+  border: 1px solid var(--color-line);
+}
+
+.pt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.pt-table th,
+.pt-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-line);
+  border-right: 1px solid var(--color-line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.pt-table th:last-child,
+.pt-table td:last-child {
+  border-right: none;
+}
+
+.pt-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.pt-table th {
+  font-weight: 600;
+  background: color-mix(in srgb, var(--color-primary) 4%, var(--color-secondary));
+  color: var(--color-primary);
+}
+
+.pt-table td:first-child {
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .project-page__body ul,
