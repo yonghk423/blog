@@ -3,6 +3,7 @@ import Link from "next/link"
 import {notFound, redirect} from "next/navigation"
 import {projectHasIndexPage} from "@/lib/projects"
 import {pageMetadata} from "@/lib/seo"
+import {seoImageUrl} from "@/lib/seo-image"
 import {type PortableTextBlock} from "next-sanity"
 import {PortableBody} from "@/components/portable-body"
 import {
@@ -19,6 +20,13 @@ type ProjectChapter = {
   slug: string | null
 }
 
+type ProjectSeo = {
+  title: string
+  description: string
+  noIndex: boolean
+  image: Parameters<typeof seoImageUrl>[0] | null
+}
+
 type ProjectData = {
   _id: string
   title: string | null
@@ -27,6 +35,7 @@ type ProjectData = {
   body: PortableTextBlock[] | null
   slug: string | null
   chapters: ProjectChapter[] | null
+  seo: ProjectSeo | null
 }
 
 type Props = {
@@ -43,10 +52,12 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
   const project = data as ProjectData | null
 
   return pageMetadata({
-    title: project?.title || "Project",
-    description: project?.summary || undefined,
+    title: project?.seo?.title || project?.title || "Project",
+    description: project?.seo?.description || project?.summary || undefined,
     path: `/projects/${slug}`,
     type: "article",
+    imageUrl: seoImageUrl(project?.seo?.image),
+    noIndex: project?.seo?.noIndex === true,
   })
 }
 

@@ -13,12 +13,21 @@ export function truncateDescription(text: string | null | undefined, max = 160) 
   return `${normalized.slice(0, max - 1).trimEnd()}…`
 }
 
+export type ResolvedSeo = {
+  title: string
+  description?: string | null
+  imageUrl?: string | null
+  noIndex?: boolean
+}
+
 type PageSeoInput = {
   title: string
-  description?: string
+  description?: string | null
   path: string
   type?: "website" | "article"
   publishedTime?: string | null
+  imageUrl?: string | null
+  noIndex?: boolean
 }
 
 export function pageMetadata({
@@ -27,31 +36,38 @@ export function pageMetadata({
   path,
   type = "website",
   publishedTime,
+  imageUrl,
+  noIndex = false,
 }: PageSeoInput): Metadata {
   const desc = truncateDescription(description) || site.description
-  const url = path
+  const images = imageUrl
+    ? [{url: imageUrl, width: 1200, height: 630}]
+    : undefined
 
   return {
     title,
     description: desc,
     alternates: {
-      canonical: url,
+      canonical: path,
     },
+    robots: noIndex
+      ? {index: false, follow: false}
+      : {index: true, follow: true},
     openGraph: {
       title,
       description: desc,
-      url,
+      url: path,
       siteName: site.name,
       locale: "ko_KR",
       type,
-      ...(type === "article" && publishedTime
-        ? {publishedTime}
-        : {}),
+      ...(images ? {images} : {}),
+      ...(type === "article" && publishedTime ? {publishedTime} : {}),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description: desc,
+      ...(imageUrl ? {images: [imageUrl]} : {}),
     },
   }
 }

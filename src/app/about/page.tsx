@@ -5,17 +5,11 @@ import {
   ProjectSidebar,
   type ProjectNavItem,
 } from "@/components/project-sidebar"
-import {pageMetadata} from "@/lib/seo"
+import {pageMetadata, truncateDescription} from "@/lib/seo"
+import {seoImageUrl} from "@/lib/seo-image"
 import {about as aboutFallback, site} from "@/lib/site"
 import {sanityFetch} from "@/sanity/lib/live"
 import {ABOUT_QUERY, PROJECTS_NAV_QUERY} from "@/sanity/queries"
-
-export const metadata: Metadata = pageMetadata({
-  title: "About",
-  description: site.description,
-  path: "/about",
-})
-
 
 type AboutHighlight = {
   _key: string
@@ -39,6 +33,13 @@ type AboutCareer = {
   summary: string | null
 }
 
+type AboutSeo = {
+  title: string
+  description: string
+  noIndex: boolean
+  image: Parameters<typeof seoImageUrl>[0] | null
+}
+
 type AboutData = {
   name: string | null
   role: string | null
@@ -59,6 +60,28 @@ type AboutData = {
   } | null
   careers: AboutCareer[] | null
   workProjects: AboutWorkProject[] | null
+  seo: AboutSeo | null
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const {data} = await sanityFetch({
+    query: ABOUT_QUERY,
+    stega: false,
+  })
+  const about = data as AboutData | null
+  const title = about?.seo?.title || "About"
+  const description =
+    truncateDescription(about?.seo?.description) ||
+    truncateDescription(about?.bio) ||
+    site.description
+
+  return pageMetadata({
+    title,
+    description,
+    path: "/about",
+    imageUrl: seoImageUrl(about?.seo?.image) || seoImageUrl(about?.profileImage),
+    noIndex: about?.seo?.noIndex === true,
+  })
 }
 
 function formatPhone(phone: string) {

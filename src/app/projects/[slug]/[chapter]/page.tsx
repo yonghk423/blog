@@ -2,7 +2,8 @@ import type {Metadata} from "next"
 import Link from "next/link"
 import {notFound, redirect} from "next/navigation"
 import {projectHasIndexPage} from "@/lib/projects"
-import {pageMetadata} from "@/lib/seo"
+import {pageMetadata, truncateDescription} from "@/lib/seo"
+import {seoImageUrl} from "@/lib/seo-image"
 import {stegaClean, type PortableTextBlock} from "next-sanity"
 import {PortableBody} from "@/components/portable-body"
 import {
@@ -11,6 +12,13 @@ import {
 } from "@/components/project-sidebar"
 import {sanityFetch} from "@/sanity/lib/live"
 import {PROJECT_CHAPTER_QUERY, PROJECTS_NAV_QUERY} from "@/sanity/queries"
+
+type ChapterSeo = {
+  title: string
+  description: string
+  noIndex: boolean
+  image: Parameters<typeof seoImageUrl>[0] | null
+}
 
 type ChapterData = {
   _id: string
@@ -22,6 +30,8 @@ type ChapterData = {
     slug: string | null
     externalUrl?: string | null
     body: PortableTextBlock[] | null
+    plainText: string | null
+    seo: ChapterSeo | null
   } | null
 }
 
@@ -37,14 +47,21 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
     stega: false,
   })
   const project = data as ChapterData | null
+  const chapter = project?.chapter
+  const description =
+    truncateDescription(chapter?.seo?.description) ||
+    truncateDescription(chapter?.plainText) ||
+    (chapter?.title
+      ? `${chapter.title}${project?.title ? ` · ${project.title}` : ""}`
+      : undefined)
 
   return pageMetadata({
-    title: project?.chapter?.title || project?.title || "Project",
-    description: project?.chapter?.title
-      ? `${project.chapter.title}${project.title ? ` · ${project.title}` : ""}`
-      : undefined,
+    title: chapter?.seo?.title || chapter?.title || project?.title || "Project",
+    description,
     path: `/projects/${slug}/${chapterSlug}`,
     type: "article",
+    imageUrl: seoImageUrl(chapter?.seo?.image),
+    noIndex: chapter?.seo?.noIndex === true,
   })
 }
 

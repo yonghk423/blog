@@ -1,14 +1,23 @@
 import {defineQuery} from "next-sanity"
 
 export const SITEMAP_QUERY = defineQuery(`{
-  "posts": *[_type == "post" && defined(slug.current) && !defined(externalUrl)]{
+  "posts": *[
+    _type == "post" &&
+    defined(slug.current) &&
+    !defined(externalUrl) &&
+    seo.noIndex != true
+  ]{
     "slug": slug.current,
     _updatedAt
   },
-  "projects": *[_type == "project" && defined(slug.current)]{
+  "projects": *[
+    _type == "project" &&
+    defined(slug.current) &&
+    seo.noIndex != true
+  ]{
     "slug": slug.current,
     _updatedAt,
-    chapters[]{
+    chapters[seo.noIndex != true]{
       "slug": slug.current,
       externalUrl
     }
@@ -52,6 +61,24 @@ export const PROJECTS_NAV_QUERY = defineQuery(`*[_type == "project" && defined(s
   }
 }`)
 
+export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
+  title,
+  field,
+  publishedAt,
+  body,
+  "plainText": pt::text(body),
+  "slug": slug.current,
+  "seo": {
+    "title": coalesce(seo.title, title, ""),
+    "description": coalesce(seo.description, pt::text(body), ""),
+    "noIndex": seo.noIndex == true,
+    "image": seo.image{
+      ...,
+      asset->{_id, url, metadata{lqip, dimensions}}
+    }
+  }
+}`)
+
 export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current == $slug][0]{
   _id,
   title,
@@ -64,6 +91,15 @@ export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current =
     title,
     "slug": slug.current,
     externalUrl
+  },
+  "seo": {
+    "title": coalesce(seo.title, title, ""),
+    "description": coalesce(seo.description, summary, ""),
+    "noIndex": seo.noIndex == true,
+    "image": seo.image{
+      ...,
+      asset->{_id, url, metadata{lqip, dimensions}}
+    }
   }
 }`)
 
@@ -76,7 +112,17 @@ export const PROJECT_CHAPTER_QUERY = defineQuery(`*[_type == "project" && slug.c
     title,
     "slug": slug.current,
     externalUrl,
-    body
+    body,
+    "plainText": pt::text(body),
+    "seo": {
+      "title": coalesce(seo.title, title, ""),
+      "description": coalesce(seo.description, pt::text(body), ""),
+      "noIndex": seo.noIndex == true,
+      "image": seo.image{
+        ...,
+        asset->{_id, url, metadata{lqip, dimensions}}
+      }
+    }
   }
 }`)
 
@@ -118,6 +164,15 @@ export const ABOUT_QUERY = defineQuery(`*[_type == "about" && _id == "about"][0]
       _key,
       title,
       items
+    }
+  },
+  "seo": {
+    "title": coalesce(seo.title, name, ""),
+    "description": coalesce(seo.description, bio, ""),
+    "noIndex": seo.noIndex == true,
+    "image": seo.image{
+      ...,
+      asset->{_id, url, metadata{lqip, dimensions}}
     }
   }
 }`)

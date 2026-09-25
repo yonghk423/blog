@@ -1,21 +1,21 @@
 import type {Metadata} from "next"
 import Link from "next/link"
 import {notFound} from "next/navigation"
-import {defineQuery, type PortableTextBlock} from "next-sanity"
+import type {PortableTextBlock} from "next-sanity"
 import {JsonLd} from "@/components/json-ld"
 import {PortableBody} from "@/components/portable-body"
 import {absoluteUrl, pageMetadata, truncateDescription} from "@/lib/seo"
+import {seoImageUrl} from "@/lib/seo-image"
 import {formatStudyDate, site} from "@/lib/site"
 import {sanityFetch} from "@/sanity/lib/live"
+import {POST_QUERY} from "@/sanity/queries"
 
-const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
-  title,
-  field,
-  publishedAt,
-  body,
-  "plainText": pt::text(body),
-  "slug": slug.current
-}`)
+type StudySeo = {
+  title: string
+  description: string
+  noIndex: boolean
+  image: Parameters<typeof seoImageUrl>[0] | null
+}
 
 type StudyPost = {
   title: string | null
@@ -24,6 +24,7 @@ type StudyPost = {
   body: PortableTextBlock[] | null
   plainText: string | null
   slug: string | null
+  seo: StudySeo | null
 }
 
 type Props = {
@@ -31,10 +32,11 @@ type Props = {
 }
 
 function studyDescription(post: StudyPost | null) {
-  if (!post?.title) return undefined
+  if (!post) return undefined
   return (
+    truncateDescription(post.seo?.description) ||
     truncateDescription(post.plainText) ||
-    `${post.title}${post.field ? ` · ${post.field}` : ""}`
+    (post.title ? `${post.title}${post.field ? ` · ${post.field}` : ""}` : undefined)
   )
 }
 
@@ -48,11 +50,13 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
   const post = data as StudyPost | null
 
   return pageMetadata({
-    title: post?.title || "Study",
+    title: post?.seo?.title || post?.title || "Study",
     description: studyDescription(post),
     path: `/studies/${slug}`,
     type: "article",
     publishedTime: post?.publishedAt,
+    imageUrl: seoImageUrl(post?.seo?.image),
+    noIndex: post?.seo?.noIndex === true,
   })
 }
 
@@ -68,14 +72,16 @@ export default async function StudyPage({params}: Props) {
 
   const date = post.publishedAt ? formatStudyDate(post.publishedAt) : null
   const description = studyDescription(post) || site.description
+  const image = seoImageUrl(post.seo?.image)
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: post.title,
+    headline: post.seo?.title || post.title,
     description,
     datePublished: post.publishedAt || undefined,
     inLanguage: "ko-KR",
     mainEntityOfPage: absoluteUrl(`/studies/${slug}`),
+    ...(image ? {image} : {}),
     author: {
       "@type": "Person",
       name: site.name,
