@@ -881,11 +881,6 @@ html.dark .header__theme-label::before {
   opacity: 0.55;
 }
 
-.study-sidebar__series {
-  margin-top: 10px;
-  padding-left: 0;
-}
-
 .about-sidebar__list {
   display: grid;
   gap: 10px;
