@@ -4,6 +4,7 @@ const PROJECTS_WITHOUT_INDEX = new Set([
   "viewer",
   "pokit",
   "pokitstory",
+  "bundler",
 ])
 
 export function projectHasIndexPage(slug: string | null | undefined) {

@@ -43,6 +43,16 @@ const nextConfig: NextConfig = {
         destination: "/projects/viewer/part1",
         permanent: true,
       },
+      {
+        source: "/projects/bundler",
+        destination: "/projects/bundler/module-bundler",
+        permanent: true,
+      },
+      {
+        source: "/studies/role-of-module-bundlers",
+        destination: "/projects/bundler/module-bundler",
+        permanent: true,
+      },
     ]
   },
 };
