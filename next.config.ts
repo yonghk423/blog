@@ -45,12 +45,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/projects/bundler",
-        destination: "/projects/bundler/module-bundler",
+        destination: "/studies/role-of-module-bundlers",
         permanent: true,
       },
       {
-        source: "/studies/role-of-module-bundlers",
-        destination: "/projects/bundler/module-bundler",
+        source: "/projects/bundler/module-bundler",
+        destination: "/studies/role-of-module-bundlers",
         permanent: true,
       },
     ]
