@@ -31,19 +31,21 @@ export function StudySidebar({
       {hasSeries ? (
         <nav aria-label={`${seriesTitle} 시리즈`}>
           <p className="about-sidebar__title">{seriesTitle}</p>
-          <ul className="about-sidebar__chapters-inner study-sidebar__series">
-            {series.map((item) => (
-              <li key={item.slug}>
-                <Link
-                  className="about-sidebar__chapter"
-                  href={`/studies/${item.slug}`}
-                  aria-current={item.slug === activeSlug ? "page" : undefined}
-                >
-                  {item.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="about-sidebar__chapters is-open study-sidebar__series">
+            <ul className="about-sidebar__chapters-inner">
+              {series.map((item) => (
+                <li key={item.slug}>
+                  <Link
+                    className="about-sidebar__chapter"
+                    href={`/studies/${item.slug}`}
+                    aria-current={item.slug === activeSlug ? "page" : undefined}
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
       ) : null}
 
