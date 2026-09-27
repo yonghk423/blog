@@ -4,11 +4,15 @@ import {notFound} from "next/navigation"
 import type {PortableTextBlock} from "next-sanity"
 import {JsonLd} from "@/components/json-ld"
 import {PortableBody} from "@/components/portable-body"
+import {
+  StudySidebar,
+  type StudySeriesItem,
+} from "@/components/study-sidebar"
 import {absoluteUrl, pageMetadata, truncateDescription} from "@/lib/seo"
 import {seoImageUrl} from "@/lib/seo-image"
-import {formatStudyDate, site} from "@/lib/site"
+import {site} from "@/lib/site"
 import {sanityFetch} from "@/sanity/lib/live"
-import {POST_QUERY} from "@/sanity/queries"
+import {POST_QUERY, STUDY_SERIES_QUERY} from "@/sanity/queries"
 
 type StudySeo = {
   title: string
@@ -70,7 +74,21 @@ export default async function StudyPage({params}: Props) {
 
   if (!post?.title) notFound()
 
-  const date = post.publishedAt ? formatStudyDate(post.publishedAt) : null
+  const seriesResult = post.field
+    ? await sanityFetch({
+        query: STUDY_SERIES_QUERY,
+        params: {field: post.field},
+      })
+    : {data: null}
+
+  const seriesItems = (seriesResult.data as StudySeriesItem[] | null) ?? [
+    {
+      title: post.title,
+      slug: post.slug || slug,
+      publishedAt: post.publishedAt,
+    },
+  ]
+
   const description = studyDescription(post) || site.description
   const image = seoImageUrl(post.seo?.image)
   const articleJsonLd = {
@@ -98,11 +116,12 @@ export default async function StudyPage({params}: Props) {
   return (
     <main className="about">
       <JsonLd data={articleJsonLd} />
-      <aside className="about-sidebar">
-        <p className="about-sidebar__label">Study</p>
-        {post.field ? <p className="about-sidebar__title">{post.field}</p> : null}
-        {date ? <p className="about-sidebar__meta">{date}</p> : null}
-      </aside>
+      <StudySidebar
+        seriesTitle={post.field}
+        items={seriesItems}
+        activeSlug={slug}
+        activePublishedAt={post.publishedAt}
+      />
 
       <div className="about-content">
         <article className="project-page">

@@ -79,6 +79,17 @@ export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slu
   }
 }`)
 
+export const STUDY_SERIES_QUERY = defineQuery(`*[
+  _type == "post" &&
+  defined(slug.current) &&
+  defined(field) &&
+  field == $field
+] | order(publishedAt asc) {
+  title,
+  publishedAt,
+  "slug": slug.current
+}`)
+
 export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current == $slug][0]{
   _id,
   title,
