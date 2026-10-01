@@ -1,0 +1,65 @@
+---
+description: Sanity Studies 글 추가/발행 워크플로 (Web 시리즈 포함)
+alwaysApply: true
+---
+
+# Studies 글 발행
+
+사용자가 본문 마크다운을 주고 **추가 / 올려 / 발행 / 퍼블리시**를 요청하면 Sanity `post`로 변환·발행한다. 로컬 파일만 만들고 끝내지 않는다.
+
+## 대상
+
+- projectId: `757pylzv`
+- dataset: `production`
+- `_type`: `post`
+- 공개 URL: `https://www.yong-hee.com/studies/<slug>`
+
+## 필드
+
+| 필드 | 규칙 |
+|------|------|
+| `title` | 본문 첫 `#` 제목 (본문 body에는 넣지 않음) |
+| `slug.current` | kebab-case 영문. 시리즈 글은 주제 반영 |
+| `field` | Studies 목록용 라벨. Web 시리즈는 **`Web`** 고정 |
+| `publishedAt` | ISO. 같은 시리즈면 **직전 글보다 이후** 시각 |
+| `body` | Portable Text |
+| `seo.title` / `seo.description` | 제목 + 1~2문장 요약 |
+
+## Web 시리즈 사이드바
+
+- `field === "Web"` 인 글들이 한 시리즈.
+- **가장 이른 `publishedAt` 글** = 사이드바 상단 제목(개요 글).
+- 이후 글들 = 하위 목록 (`01.`, `02.`, …).
+- `field` 값을 시리즈 제목으로 쓰지 않음. (`Web`은 Studies 목록 field일 뿐)
+
+구현: `src/lib/study-series.ts`의 `resolveStudySeries`.
+
+## Markdown → Portable Text
+
+- `#` 첫 제목 → document title만
+- 나머지 `#` / `##` → `h2`, `###` → `h3`
+- `---` 생략
+- `>` → `blockquote`
+- `-` 목록 → `listItem: "bullet"`, `level: 1`
+- 코드펜스 → `_type: "codeBlock"`, `language` ∈ `tsx|jsx|css|html|bash|json|text`
+  - `js/javascript` → `jsx`, `ts/typescript` → `tsx`, 그 외/없음 → `text`
+  - `` ```text id="..." `` → language는 `text`만 (id 제거)
+- 인라인 `` `code` `` → marks `code`, `**bold**` → `strong`
+- HTML 엔티티(`&#xB97C;` 등)는 한글로 디코드
+- 표 → `_type: "table"` (`headers`, `rows[].cells`)
+
+## 발행 절차
+
+1. slug 중복 없는지 GROQ 확인
+2. draft 생성 → published `createOrReplace` → draft 삭제  
+   API: `https://757pylzv.api.sanity.io/v2025-09-16/data/mutate/production`  
+   토큰: `~/.config/sanity/config.json`의 `authToken` (**출력 금지**)
+3. 발행 후 `*[_type=="post" && field==$field] | order(publishedAt asc)` 로 순서 확인
+4. 사용자에게 **제목, URL, 시리즈 내 위치**만 짧게 보고
+5. `.tmp` 등 임시 파일 정리
+
+## 하지 말 것
+
+- `field`를 `네트워크` 등으로 바꿔 시리즈를 쪼개지 말 것 (Web 시리즈 기준)
+- 글 삭제/언퍼블리시 요청이 아니면 기존 글 삭제하지 말 것
+- 토큰·시크릿을 채팅에 노출하지 말 것
