@@ -11,6 +11,7 @@ import {
 import {absoluteUrl, pageMetadata, truncateDescription} from "@/lib/seo"
 import {seoImageUrl} from "@/lib/seo-image"
 import {site} from "@/lib/site"
+import {resolveStudySeries} from "@/lib/study-series"
 import {sanityFetch} from "@/sanity/lib/live"
 import {POST_QUERY, STUDY_SERIES_QUERY} from "@/sanity/queries"
 
@@ -81,13 +82,16 @@ export default async function StudyPage({params}: Props) {
       })
     : {data: null}
 
-  const seriesItems = (seriesResult.data as StudySeriesItem[] | null) ?? [
-    {
-      title: post.title,
-      slug: post.slug || slug,
-      publishedAt: post.publishedAt,
-    },
-  ]
+  const fallbackItem: StudySeriesItem = {
+    title: post.title,
+    slug: post.slug || slug,
+    publishedAt: post.publishedAt,
+  }
+  const series = resolveStudySeries(
+    post.field,
+    (seriesResult.data as StudySeriesItem[] | null) ?? [],
+    fallbackItem,
+  )
 
   const description = studyDescription(post) || site.description
   const image = seoImageUrl(post.seo?.image)
@@ -117,8 +121,10 @@ export default async function StudyPage({params}: Props) {
     <main className="about">
       <JsonLd data={articleJsonLd} />
       <StudySidebar
-        seriesTitle={post.field}
-        items={seriesItems}
+        seriesTitle={series.seriesTitle}
+        seriesHref={series.seriesHref}
+        seriesRootSlug={series.seriesRootSlug}
+        items={series.items}
         activeSlug={slug}
         activePublishedAt={post.publishedAt}
       />

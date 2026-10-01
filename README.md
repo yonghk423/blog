@@ -2,6 +2,10 @@
 
 Next.js portfolio + Sanity CMS blog.
 
+## SEO
+
+검색·공유·사이트맵 설정은 [docs/seo.md](./docs/seo.md)를 참고한다.
+
 ## Setup
 
 1. Copy `.env.example` to `.env.local` and fill in Sanity values.
