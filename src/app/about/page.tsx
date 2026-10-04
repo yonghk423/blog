@@ -44,6 +44,7 @@ type AboutData = {
   name: string | null
   role: string | null
   bio: string | null
+  education: string | null
   phone: string | null
   email: string | null
   github: string | null
@@ -136,6 +137,7 @@ export default async function AboutPage() {
   const bio =
     about?.bio ||
     aboutFallback.intro.join("\n\n")
+  const education = about?.education || null
   const phone = about?.phone || null
   const email = about?.email || site.email
   const github = about?.github || site.github
@@ -191,8 +193,22 @@ export default async function AboutPage() {
                   </p>
                 ))}
             </div>
-            {(phone || email || github) && (
+            {(education || phone || email || github) && (
               <ul className="about-intro__contacts">
+                {education ? (
+                  <li>
+                    <span className="about-intro__contact-text">
+                      <span className="about-intro__contact-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                          <path d="M2.5 9.5 12 4l9.5 5.5L12 15 2.5 9.5Z" />
+                          <path d="M6 11.5v4.2c0 .7 2.7 2.3 6 2.3s6-1.6 6-2.3v-4.2" />
+                          <path d="M20.5 10.2V15" />
+                        </svg>
+                      </span>
+                      {education}
+                    </span>
+                  </li>
+                ) : null}
                 {phone ? (
                   <li>
                     <a href={`tel:${phone.replace(/\D/g, "")}`}>

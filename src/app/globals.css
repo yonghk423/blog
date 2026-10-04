@@ -1677,7 +1677,8 @@ html.dark .header__theme-label::before {
   color: var(--color-muted);
 }
 
-.about-intro__contacts a {
+.about-intro__contacts a,
+.about-intro__contact-text {
   display: inline-flex;
   align-items: center;
   gap: 8px;

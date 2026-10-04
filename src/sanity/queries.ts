@@ -141,6 +141,7 @@ export const ABOUT_QUERY = defineQuery(`*[_type == "about" && _id == "about"][0]
   name,
   role,
   bio,
+  education,
   phone,
   email,
   github,
