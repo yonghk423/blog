@@ -83,7 +83,10 @@ export const STUDY_SERIES_QUERY = defineQuery(`*[
   _type == "post" &&
   defined(slug.current) &&
   defined(field) &&
-  field == $field
+  (
+    field == $field ||
+    $field in field
+  )
 ] | order(publishedAt asc) {
   title,
   publishedAt,

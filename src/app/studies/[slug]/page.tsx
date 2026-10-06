@@ -8,6 +8,7 @@ import {
   StudySidebar,
   type StudySeriesItem,
 } from "@/components/study-sidebar"
+import {formatFields, primaryField} from "@/lib/fields"
 import {absoluteUrl, pageMetadata, truncateDescription} from "@/lib/seo"
 import {seoImageUrl} from "@/lib/seo-image"
 import {site} from "@/lib/site"
@@ -24,7 +25,7 @@ type StudySeo = {
 
 type StudyPost = {
   title: string | null
-  field: string | null
+  field: string | string[] | null
   publishedAt: string | null
   body: PortableTextBlock[] | null
   plainText: string | null
@@ -38,10 +39,11 @@ type Props = {
 
 function studyDescription(post: StudyPost | null) {
   if (!post) return undefined
+  const labels = formatFields(post.field)
   return (
     truncateDescription(post.seo?.description) ||
     truncateDescription(post.plainText) ||
-    (post.title ? `${post.title}${post.field ? ` · ${post.field}` : ""}` : undefined)
+    (post.title ? `${post.title}${labels ? ` · ${labels}` : ""}` : undefined)
   )
 }
 
@@ -75,10 +77,11 @@ export default async function StudyPage({params}: Props) {
 
   if (!post?.title) notFound()
 
-  const seriesResult = post.field
+  const seriesField = primaryField(post.field)
+  const seriesResult = seriesField
     ? await sanityFetch({
         query: STUDY_SERIES_QUERY,
-        params: {field: post.field},
+        params: {field: seriesField},
       })
     : {data: null}
 
@@ -88,13 +91,14 @@ export default async function StudyPage({params}: Props) {
     publishedAt: post.publishedAt,
   }
   const series = resolveStudySeries(
-    post.field,
+    seriesField,
     (seriesResult.data as StudySeriesItem[] | null) ?? [],
     fallbackItem,
   )
 
   const description = studyDescription(post) || site.description
   const image = seoImageUrl(post.seo?.image)
+  const labels = formatFields(post.field)
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -114,7 +118,7 @@ export default async function StudyPage({params}: Props) {
       name: site.name,
       url: site.siteUrl,
     },
-    about: post.field || undefined,
+    about: labels || undefined,
   }
 
   return (

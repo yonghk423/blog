@@ -1,8 +1,9 @@
+import {formatFields, normalizeFields} from "@/lib/fields"
 import {studyYear, type Study} from "@/lib/site"
 
 export type SanityStudy = {
   title: string | null
-  field: string | null
+  field: string | string[] | null
   publishedAt: string | null
   href: string | null
   slug: string | null
@@ -29,13 +30,14 @@ export type SanityStudiesPayload = {
 
 export function toStudies(items: SanityStudy[]): Study[] {
   return items.flatMap((item) => {
-    if (!item.title || !item.field || !item.publishedAt) return []
+    const fields = normalizeFields(item.field)
+    if (!item.title || !fields.length || !item.publishedAt) return []
     const year = studyYear(item.publishedAt)
     if (!Number.isFinite(year)) return []
     return [
       {
         title: item.title,
-        field: item.field,
+        field: formatFields(fields),
         year,
         publishedAt: item.publishedAt,
         href: item.href || undefined,

@@ -20,14 +20,14 @@ alwaysApply: true
 |------|------|
 | `title` | 본문 첫 `#` 제목 (본문 body에는 넣지 않음) |
 | `slug.current` | kebab-case 영문. 시리즈 글은 주제 반영 |
-| `field` | Studies 목록용 라벨. Web 시리즈는 **`Web`** 고정 |
+| `field` | Studies 목록용 라벨 **배열**. 여러 개 가능. Web 시리즈는 **`Web`** 포함. 첫 값이 사이드바 시리즈 기준 |
 | `publishedAt` | ISO. 같은 시리즈면 **직전 글보다 이후** 시각 |
 | `body` | Portable Text |
 | `seo.title` / `seo.description` | 제목 + 1~2문장 요약 |
 
 ## Web 시리즈 사이드바
 
-- `field === "Web"` 인 글들이 한 시리즈.
+- `field`에 `"Web"`이 포함된 글들이 한 시리즈.
 - **가장 이른 `publishedAt` 글** = 사이드바 상단 제목(개요 글).
 - 이후 글들 = 하위 목록 (`01.`, `02.`, …).
 - `field` 값을 시리즈 제목으로 쓰지 않음. (`Web`은 Studies 목록 field일 뿐)
@@ -54,7 +54,7 @@ alwaysApply: true
 2. draft 생성 → published `createOrReplace` → draft 삭제  
    API: `https://757pylzv.api.sanity.io/v2025-09-16/data/mutate/production`  
    토큰: `~/.config/sanity/config.json`의 `authToken` (**출력 금지**)
-3. 발행 후 `*[_type=="post" && field==$field] | order(publishedAt asc)` 로 순서 확인
+3. 발행 후 `*[_type=="post" && (field==$field || $field in field)] | order(publishedAt asc)` 로 순서 확인
 4. 사용자에게 **제목, URL, 시리즈 내 위치**만 짧게 보고
 5. `.tmp` 등 임시 파일 정리
 

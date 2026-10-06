@@ -941,9 +941,19 @@ html.dark .header__theme-label::before {
 
 .list-link .field,
 .studies-lists__head .field {
-  min-width: 100px;
+  min-width: 120px;
+  max-width: 180px;
   text-align: right;
   justify-self: end;
+}
+
+.list-link .field span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;
+  line-height: 1.25;
 }
 
 @media (max-width: 767px) {

@@ -1,3 +1,4 @@
+import {formatFields} from "@/lib/fields"
 import {createOgImage, ogContentType, ogSize} from "@/lib/og"
 import {client} from "@/sanity/lib/client"
 
@@ -13,7 +14,7 @@ export default async function Image({params}: Props) {
   const {slug} = await params
   const post = await client.fetch<{
     title: string | null
-    field: string | null
+    field: string | string[] | null
     seoTitle: string | null
   } | null>(
     `*[_type == "post" && slug.current == $slug][0]{
@@ -27,6 +28,6 @@ export default async function Image({params}: Props) {
   return createOgImage({
     eyebrow: "STUDY",
     title: post?.seoTitle || post?.title || "Study",
-    description: post?.field || undefined,
+    description: formatFields(post?.field) || undefined,
   })
 }

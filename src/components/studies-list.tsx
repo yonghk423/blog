@@ -3,6 +3,7 @@
 import Link from "next/link"
 import {useState} from "react"
 import {SolariLine} from "@/components/solari-board"
+import {formatFields} from "@/lib/fields"
 import {formatStudyDate, type Study} from "@/lib/site"
 
 type Group = {
@@ -29,7 +30,7 @@ function StudyRow({study, year}: {study: Study; year?: string}) {
         )}
       </p>
       <p className="field">
-        <span>{study.field}</span>
+        <span>{formatFields(study.field)}</span>
       </p>
     </>
   )
