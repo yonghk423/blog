@@ -1,3 +1,6 @@
+import Image from "next/image"
+import {urlFor} from "@/sanity/lib/image"
+import type {SanityImageSource} from "@sanity/image-url"
 import type {ReactNode} from "react"
 import {
   PortableText,
@@ -135,6 +138,17 @@ const components = {
     },
   },
   types: {
+    image: ({value}) => {
+      const image = value as SanityImageSource & {alt?: string; caption?: string}
+      return (
+        <figure style={{margin: "32px 0"}}>
+          <Image src={urlFor(image).width(1600).url()} alt={image.alt ?? ""}
+            width={1600} height={1000} sizes="(max-width: 940px) 100vw, 940px"
+            style={{width: "100%", height: "auto"}} />
+          {image.caption ? <figcaption>{image.caption}</figcaption> : null}
+        </figure>
+      )
+    },
     codeBlock: ({value}) => <CodeBlock value={value as CodeBlockValue} />,
     table: ({value}) => <ContentTable value={value as TableValue} />,
   },
